@@ -1,0 +1,20 @@
+# Private working files in the project root. These must never be published.
+# The public site lives in /site and only /site is deployed.
+/*.xlsx
+/*.xls
+/*.pdf
+/*.png
+/*.jpg
+/*.jpeg
+/*.webp
+/*.mp4
+/*.mov
+/private-source/
+/card-originals/
+/archive/
+
+# Tooling
+node_modules/
+.taste-skill/
+.DS_Store
+Thumbs.db
