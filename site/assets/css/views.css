@@ -106,6 +106,7 @@
 
 /* ---------------- SECTIONS ON THE HOME PAGE ---------------- */
 .sections { position: relative; z-index: 2; }
+.js .sections:empty { min-height: 100svh; }   /* keeps the footer below the fold until the sections are drawn, so it never jumps */
 /* a full-width band (for the glow and the big number) holding the fixed-width .wrap container */
 .sec { position: relative; isolation: isolate; overflow-x: clip; padding-top: clamp(56px, 8vw, 110px); scroll-margin-top: calc(var(--nav) - 32px); }
 .sec:focus, .sec:focus-visible { outline: none; }
@@ -125,6 +126,7 @@
 .about__facts > div { padding: 16px 18px; border: 1px solid var(--stroke); border-radius: 12px; background: var(--surface); }
 .about__facts dt { font: 600 0.68rem var(--f-body); letter-spacing: 0.18em; text-transform: uppercase; color: var(--ember-2); }
 .about__facts dd { margin: 6px 0 0; font: 600 1.05rem / 1.25 var(--f-body); }
+.row__track:focus-visible { outline: 3px solid #fff; outline-offset: 4px; border-radius: 12px; }
 .about__facts small { display: block; margin-top: 2px; color: var(--ink-3); font-size: 0.82rem; }
 .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: clamp(18px, 2.6vw, 30px); }
 .statbox { padding: 20px 22px; border: 1px solid var(--stroke); border-radius: 14px; background: var(--surface); }
@@ -158,7 +160,8 @@
 .orig-grid--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .orig {
   position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; min-height: 380px; padding: 24px; border: 0; border-radius: 16px; overflow: hidden; overflow: clip;   /* clip: not a scroll container, so its icon can animate with the page */
-  background: var(--art); color: #fff; text-align: left; cursor: pointer; isolation: isolate; transition: transform 0.25s var(--ease), box-shadow 0.25s;
+  background: var(--img, none) 50% 0 / cover no-repeat, var(--art); background-blend-mode: var(--blend, overlay), normal, normal;   /* app screenshot blended into the colour overlay */
+  color: #fff; text-align: left; cursor: pointer; isolation: isolate; transition: transform 0.25s var(--ease), box-shadow 0.25s;
 }
 .orig::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.4) 38%, rgba(8, 8, 10, 0.92) 100%); }
 .orig:hover, .orig:focus-visible { transform: translateY(-4px); box-shadow: 0 26px 60px rgba(0, 0, 0, 0.6); }
@@ -178,16 +181,26 @@
 .orig:hover .orig__cta .ico, .orig:focus-visible .orig__cta .ico { transform: translateX(4px); }
 .orig-grid--4 .orig { min-height: 340px; }
 
-.util-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
-.util {
-  display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 18px; border: 1px solid var(--stroke); border-radius: 14px; background: var(--surface); color: #fff; text-align: left; cursor: pointer;
-  transition: background 0.2s, border-color 0.2s, transform 0.2s var(--ease);
-}
-.util:hover, .util:focus-visible { background: var(--surface-2); border-color: var(--stroke-2); transform: translateY(-3px); }
-.util__ico { width: 30px; height: 30px; margin-bottom: 8px; color: var(--ember-2); }
-.util__t { font: 600 0.98rem / 1.25 var(--f-body); }
-.util__fig { margin-top: 6px; font: 400 clamp(2rem, 3vw, 2.6rem) / 0.95 var(--f-display); color: var(--gold); }
-.util__lab { color: var(--ink-3); font-size: 0.82rem; }
+/* application cards (AI Lab): a hook question, one plain sentence, three things it does, the result as a small footer */
+.orig.orig--app { gap: 9px; min-height: 0; }
+.orig--app::after { background: linear-gradient(180deg, rgba(0, 0, 0, 0.06) 0%, rgba(0, 0, 0, 0.58) 26%, rgba(8, 8, 10, 0.93) 56%, rgba(8, 8, 10, 0.97) 100%); }   /* darker than the plain cards: there is more text to read over the screenshot */
+.orig--app .orig__ico { width: 44px; height: 44px; margin-bottom: 10px; }
+.orig--app .orig__k { padding: 4px 11px; border-radius: 999px; font-size: 0.64rem; letter-spacing: 0.12em; background: rgba(0, 0, 0, 0.36); border: 1px solid rgba(255, 255, 255, 0.28); }
+.orig--app .orig__t { font-size: clamp(1.9rem, 2.6vw, 2.5rem); }
+.orig__hook { margin-top: 2px; font: italic 500 1.13rem / 1.35 var(--f-serif); color: #fff; }
+.orig--app .orig__m { font-size: 0.94rem; color: rgba(255, 255, 255, 0.9); }
+.orig--app .orig__facts { margin-top: 2px; font-size: 0.86rem; }
+.orig__foot { width: 100%; margin-top: auto; padding-top: 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; border-top: 1px solid rgba(255, 255, 255, 0.24); }
+.orig__res { min-width: 0; display: grid; gap: 2px; font-size: 0.82rem; line-height: 1.25; }
+.orig__res i { font: 600 0.6rem var(--f-body); font-style: normal; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.7; }
+.orig__res b { color: var(--gold); font-weight: 600; }
+.orig--app .orig__cta { flex: none; margin: 0; padding: 10px 16px; border-radius: 999px; color: #111; font-size: 0.82rem; background: #fff; transition: background 0.2s, scale 0.2s var(--ease); }
+.orig--app:hover .orig__cta, .orig--app:focus-visible .orig__cta { background: var(--gold); scale: 1.04; }
+
+/* five utilities: the same big cards, in a 6-column grid so 3 sit on top and 2 wider ones below */
+.orig-grid--5 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.orig-grid--5 .orig { grid-column: span 2; min-height: 340px; }
+.orig-grid--5 .orig:nth-child(n + 4) { grid-column: span 3; }
 
 .principles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
 .principle { padding: 20px 22px 22px; border: 1px solid var(--stroke); border-radius: 14px; background: var(--surface); }
@@ -457,7 +470,7 @@ html[data-fx='wild'] .marq { display: block; }
       & .season-card[data-reveal='right'] { --rr: 0 1 0 32deg; --rs: 0.88; --rx: 70px; }
 
       /* 7. icons spin and flip into place */
-      & .orig__ico, & .util__ico { animation: ico-spin auto linear backwards; animation-timeline: view(); animation-range: cover 0% cover 38%; }
+      & .orig__ico { animation: ico-spin auto linear backwards; animation-timeline: view(); animation-range: cover 0% cover 38%; }
       & .trophy-grid { perspective: 1200px; }
       & .trophy .ico { animation: ico-flip auto linear backwards; animation-timeline: view(); animation-range: cover 0% cover 40%; }
 
@@ -508,7 +521,9 @@ html[data-fx='wild'] .marq { display: block; }
 @media (max-width: 1100px) {
   .orig-grid--3, .principles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .orig-grid--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .util-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .orig-grid--5 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .orig-grid--5 .orig, .orig-grid--5 .orig:nth-child(n + 4) { grid-column: auto; }
+  .orig-grid--5 .orig:last-child { grid-column: 1 / -1; }
   .about { grid-template-columns: 1fr; }
 }
 @media (max-width: 860px) {
@@ -530,7 +545,8 @@ html[data-fx='wild'] .marq { display: block; }
   .season-card, .season-card__cols { grid-template-columns: 1fr; }
   .season-card__side { min-height: 170px; }
   .orig { min-height: 320px; }
-  .orig-grid--3, .orig-grid--4, .principles { grid-template-columns: 1fr; }
+  .orig-grid--3, .orig-grid--4, .orig-grid--5, .principles { grid-template-columns: 1fr; }
+  .orig-grid--5 .orig:last-child { grid-column: auto; }
   /* skill tabs become one swipeable row above the panel, with a fade on the edge that has more tabs */
   .skilltabs { grid-template-columns: 1fr; gap: 14px; }
   .skilltabs__list { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; scroll-snap-type: inline proximity; scroll-padding-inline: 2.5rem; padding-block: 2px 6px; }
@@ -540,7 +556,6 @@ html[data-fx='wild'] .marq { display: block; }
   .st__meta { display: none; }
   .st[aria-selected='true']::after { inset: auto 14px 2px 14px; border-inline-start: 0; border-block-end: 3px solid var(--ember); border-radius: 3px; }
   .skilltiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .util-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .about__facts { grid-template-columns: 1fr; }
   .stats, .paper__facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .paper__cols { grid-template-columns: 1fr; }

@@ -13,6 +13,11 @@
 /card-originals/
 /archive/
 
+# Product demo videos and their poster frames: held back until the privacy check is done (README, The product demo videos).
+# Take these two lines out, set demoVideos: true in content.js, then commit the files.
+/site/assets/video/demo-*.mp4
+/site/assets/img/demo-*.webp
+
 # Tooling
 node_modules/
 .taste-skill/

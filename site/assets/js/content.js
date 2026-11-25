@@ -20,7 +20,7 @@
       email: EMAIL,
       phoneDisplay: '+91 96983 43157',
       phoneTel: '+919698343157',
-      linkedin: 'https://www.linkedin.com/in/kumaran-ms-381611145',
+      linkedin: 'https://www.linkedin.com/in/kumaran-m-s-381611145/',
       place: 'Madurai, Tamil Nadu, India',
     },
 
@@ -65,6 +65,10 @@
        (Visitors who prefer reduced motion always get none of it.) */
     fx: 'wild',
 
+    /* The three product demo videos in the popups. Off until you have checked what is on screen in them (employer logo,
+       account names, a real client). The files stay out of git (.gitignore) while this is false. */
+    demoVideos: false,
+
     /* The giant words that slide sideways between sections (only in 'wild'). One list per band. */
     marquee: [
       ['AI automation', 'Claude Code', 'WordPress', 'PHP', 'Google Ads', 'Technical SEO'],
@@ -87,7 +91,13 @@
          Trophies:           trophy-1 ... trophy-7
        List the ones you have in `have` (for example ['about', 'season-1']), or use 'all' when every file is there.
        The coloured overlay stays on top of each picture; a card with no picture keeps its plain colour. */
-    images: { base: 'assets/img/cards/', have: 'all' },
+    images: {
+      base: 'assets/img/cards/',
+      have: ['about', 'story', 'lab', 'method', 'skills', 'trophies', 'core', 'websites', 'resume', 'contact',
+        'season-1', 'season-2', 'season-3', 'season-4', 'season-5',
+        'trophy-1', 'trophy-2', 'trophy-3', 'trophy-4', 'trophy-5', 'trophy-6', 'trophy-7',
+        'app-gads', 'app-modernizer', 'app-forms'],   // add 'craft' here once cards/craft.webp exists
+    },
 
     /* About section */
     about: {
@@ -107,11 +117,12 @@
     /* Heading text of each section on the home page */
     blocks: {
       about: { eyebrow: 'The pilot', title: 'About me', sub: '' },
+      craft: { eyebrow: 'Five crafts', title: 'What I do', sub: 'Software, design, SEO, AI-assisted builds and servers. Pick a craft and watch it work.' },
       story: { eyebrow: 'Original series · 5 seasons', title: 'My journey', sub: 'From data entry to AI tools. Each season lists what happened and the skills I picked up along the way.' },
-      lab: { eyebrow: 'Now streaming · 8 tools', title: 'AI Lab', sub: 'Three full products and five utilities, built with Claude Code for a digital-marketing agency’s daily work. Open a title to read the details and try a demo.' },
+      lab: { eyebrow: 'Now streaming · 8 tools', title: 'AI Lab', sub: 'Three full products and five utilities, built with Claude Code for a digital-marketing agency’s daily work. Each card says what the app is and why it exists. Open one to see how it works, what keeps it safe and where AI is (and is not) used.' },
       method: { eyebrow: 'Six rules', title: 'How I build with AI', sub: 'The habits that make AI output safe to publish.' },
       skills: { eyebrow: '38 skills · 2 in training', title: 'Skill universe', sub: 'What I work with, grouped by where I picked it up.' },
-      trophies: { eyebrow: 'Awards and milestones', title: 'Trophy room', sub: 'Seven trophies on the shelf, from a first promotion to the Best Employee Award.' },
+      trophies: { eyebrow: 'Awards and milestones', title: 'Trophy room', sub: 'Eight trophies on the shelf, from a first promotion to the Best Employee Award.' },
       core: { eyebrow: 'Top five', title: 'My core five', sub: '' },
       websites: { eyebrow: 'Client names left out', title: 'Websites I’ve built', sub: 'Open a title for the stack behind it.' },
       contact: { eyebrow: 'Next episode', title: 'End credits', sub: '' },
@@ -263,148 +274,17 @@
       { id: 'images', target: '#gadgets', kind: 'utility', icon: 'i-image', name: 'Image Cleaner', line: 'Never auto-deletes' },
     ],
 
-    /* Fictional demo data for the GAds Dashboard mock. */
-    gadsDemo: {
-      account: 'Demo Plumbing Co.',
-      kpis: [
-        { label: 'Spend', value: '$12,480', delta: '+4.2%' },
-        { label: 'Clicks', value: '8,214', delta: '+6.8%' },
-        { label: 'Conversions', value: '312', delta: '+11.5%' },
-        { label: 'Cost per lead', value: '$40.00', delta: '-6.3%' },
-      ],
-      series: [41, 44, 39, 47, 52, 49, 55, 58, 54, 61, 66, 63, 70, 74],
-      prompts: [
-        {
-          q: 'Which keywords are wasting spend?',
-          a: 'Three keywords spent $1,284 this month with no conversions: "free plumber quote" ($612), "plumbing jobs near me" ($401) and "diy pipe repair" ($271). I suggest adding them as negatives. I checked each against the latest account data before answering.',
-        },
-        {
-          q: 'Why did cost per lead rise last week?',
-          a: 'Cost per lead rose from $38 to $47. Mobile clicks on "emergency plumber" grew 31% while the call extension was paused on two campaigns. Re-enabling it should recover most of the gap. Figures checked against live account data.',
-        },
-        {
-          q: 'Which campaigns need attention?',
-          a: 'Two of eleven. "Drain Cleaning – Search" has spent 94% of budget by midday. "Water Heater" has an ad group with a single responsive ad rated Poor. Both are in the Audit tab with fixes ready.',
-        },
-      ],
-      audit: [
-        { sev: 'High', title: 'Keyword cannibalization', text: '"water heater repair" appears in 3 ad groups and competes with itself.' },
-        { sev: 'High', title: 'Wasted spend', text: '$1,284 spent on 9 search terms with zero conversions in 30 days.' },
-        { sev: 'Medium', title: 'Weak responsive ad', text: 'One ad group has a single responsive search ad rated "Poor".' },
-        { sev: 'Medium', title: 'Budget limited', text: '"Drain Cleaning" is capped by budget before 2 pm on 6 of the last 7 days.' },
-        { sev: 'Low', title: 'Missing sitelinks', text: '2 campaigns run without sitelinks or callouts.' },
-      ],
-      rsa: {
-        keyword: 'emergency plumber',
-        headlines: [
-          'Emergency Plumber, 24/7',
-          'Licensed Local Plumbers',
-          'Same-Day Plumbing Repairs',
-          'Upfront Pricing, No Surprises',
-          'Burst Pipe? Call Now',
-          'Trusted by 2,000+ Homeowners',
-        ],
-        limit: 30,
-      },
-    },
-
-    modernizer: {
-      steps: [
-        { name: 'Scan', text: 'Reads every page of the site folder and classifies it: home, inner, contact.' },
-        { name: 'Audit', text: 'Measures SEO and structure problems and lists what needs attention.' },
-        { name: 'Redesign', text: 'Fits each page’s own content into one of 10 Tailwind designs.' },
-        { name: 'Check', text: 'Compares every page with the original. A page that loses anything fails.' },
-        { name: 'Report', text: 'Runs SEO, link, accessibility and real-browser checks and writes the report.' },
-        { name: 'Package', text: 'Builds the upload package with a rollback. The original folder is never written to.' },
-      ],
-      checks: ['Title', 'Meta description', 'Canonical tag', 'Main heading (H1)', 'Body text', 'Links', 'Phone numbers', 'Forms', 'Tracking IDs'],
-      designs: [
-        { name: 'Signature', bg: '#0b2447', ink: '#f2f6ff', accent: '#4fb0ff', radius: '14px', font: 'var(--f-body)', card: '#12315f' },
-        { name: 'Horizon', bg: '#f7f1e8', ink: '#2b2118', accent: '#b4572e', radius: '2px', font: 'Georgia, serif', card: '#fffaf2' },
-        { name: 'Vertex', bg: '#14171c', ink: '#f4f4f4', accent: '#ffb22e', radius: '0px', font: 'var(--f-display)', card: '#1e232b' },
-        { name: 'Lumen', bg: '#eef6f6', ink: '#173a3a', accent: '#1fa39a', radius: '22px', font: 'var(--f-body)', card: '#ffffff' },
-        { name: 'Nova', bg: '#050b1c', ink: '#e6efff', accent: '#35d3f0', radius: '12px', font: 'var(--f-display)', card: '#0d1a38' },
-        { name: 'Crest', bg: '#f4f8fb', ink: '#10283d', accent: '#1d6fb8', radius: '8px', font: 'var(--f-body)', card: '#ffffff' },
-        { name: 'Orbit', bg: '#102a43', ink: '#f0f4f8', accent: '#ff7a45', radius: '999px', font: 'var(--f-body)', card: '#1b3a57' },
-        { name: 'Vista', bg: '#fbfbf8', ink: '#222', accent: '#3a7d44', radius: '4px', font: 'var(--f-body)', card: '#f1f3ec' },
-        { name: 'Facet', bg: '#f3f1fa', ink: '#1d1b2e', accent: '#c2415d', radius: '6px', font: 'var(--f-display)', card: '#ffffff' },
-        { name: 'Zephyr', bg: '#eaf7ee', ink: '#12331f', accent: '#2f9e5a', radius: '28px 6px 28px 6px', font: 'var(--f-body)', card: '#ffffff' },
-      ],
-    },
-
-    forms: {
-      fieldTypes: ['Name', 'Email', 'Phone', 'Select', 'Date', 'File upload', 'Signature', 'Rating', 'Consent', 'Captcha'],
-      log: [
-        'Spam check passed: honeypot, rate limit, captcha',
-        'Entry #1284 saved to the Demo Plumbing site',
-        'Notification email queued for the sales team',
-        'Autoresponder sent to the visitor',
-        'Webhook to the CRM: 200 OK in 142 ms',
-        'Lead added to this month’s report',
-      ],
-    },
-
+    /* The five utilities. Their card and popup words live in apps.js; this keeps the icon, colour and the small before/after visuals. */
     gadgets: [
-      {
-        id: 'enhancer',
-        icon: 'i-doc',
-        name: 'Page Content Enhancer',
-        what: 'Rewrites on-page copy for SEO. Claude only ever sees a list of text units, never your HTML or PHP.',
-        figure: '75 → 90+',
-        figureLabel: 'average SEO score',
-        meta: 'Tested on sites of 1,000+ pages. Month of manual work becomes under a day.',
-        bars: [['Manual', 100, 'about a month'], ['With the tool', 6, 'under a day']],
-      },
-      {
-        id: 'meta',
-        icon: 'i-tag',
-        name: 'Meta Tag Updater',
-        what: 'Writes titles, descriptions, H1s and schema for a whole site. Runs as a dry run first.',
-        figure: '~90%',
-        figureLabel: 'less manual effort',
-        meta: 'Batches several pages per AI call to keep cost low.',
-        bars: [['Manual', 100, 'hours per site'], ['With the tool', 10, 'about a minute per site']],
-      },
-      {
-        id: 'canonical',
-        icon: 'i-link',
-        name: 'Canonical Injector',
-        what: 'Scans a site folder, validates canonical tags and injects the missing ones without touching formatting.',
-        figure: '30+',
-        figureLabel: 'client sites',
-        meta: 'Preview mode first. Seconds per site.',
-        bars: null,
-        demo: {
-          type: 'code',
-          lines: [
-            ['', '<head>'],
-            ['', '  <title>Our services</title>'],
-            ['+', '  <link rel="canonical" href="https://example.com/services/">'],
-            ['', '</head>'],
-          ],
-        },
-      },
-      {
-        id: 'report',
-        icon: 'i-chart',
-        name: 'SEO Report Automation',
-        what: 'Turns an SEO export into a branded client report with six charts and an executive summary.',
-        figure: '1–2 h → 5 min',
-        figureLabel: 'per report',
-        meta: 'In use on 7 client projects.',
-        bars: [['Manual', 100, '1–2 hours'], ['With the tool', 6, 'about 5 minutes']],
-      },
-      {
-        id: 'images',
-        icon: 'i-image',
-        name: 'Image Cleaner',
-        what: 'Finds unused images on static sites by reading HTML, CSS, JSON-LD and manifests. Moves them to a backup you can restore.',
-        figure: '0',
-        figureLabel: 'files auto-deleted',
-        meta: 'Built for sites with 50,000+ images. SHA-256 duplicate detection.',
-        bars: null,
-        demo: { type: 'steps', items: ['Scan HTML, CSS, JSON-LD and manifests', 'Move unused files to a dated backup', 'Restore one file or the whole batch'] },
-      },
+      { id: 'enhancer', icon: 'i-doc', name: 'Page Content Enhancer', art: 'ember',
+        bars: [['Manual', 100, 'about a month'], ['With the tool', 6, 'under a day']] },
+      { id: 'meta', icon: 'i-tag', name: 'Meta Tag Updater', art: 'teal',
+        bars: [['Manual', 100, 'hours per site'], ['With the tool', 10, 'about a minute per site']] },
+      { id: 'canonical', icon: 'i-link', name: 'Canonical Injector', art: 'slate',
+        demo: { type: 'code', lines: [['', '<head>'], ['', '  <title>Our services</title>'], ['+', '  <link rel="canonical" href="https://example.com/services/">'], ['', '</head>']] } },
+      { id: 'report', icon: 'i-chart', name: 'SEO Report Automation', art: 'amber',
+        bars: [['Manual', 100, '1–2 hours'], ['With the tool', 6, 'about 5 minutes']] },
+      { id: 'images', icon: 'i-image', name: 'Image Cleaner', art: 'green' },
     ],
 
     principles: [
@@ -419,6 +299,7 @@
     achievements: [
       { title: 'Best Employee Award', text: 'CG-VAK Software & Exports Ltd., 2023', tier: 'gold' },
       { title: 'Claude Code in Action', text: 'Certification from Anthropic', tier: 'silver' },
+      { title: 'AI Fluency: Framework & Foundations', text: 'Certificate of Completion from Anthropic, Sep 2026', tier: 'silver' },
       { title: 'Three promotions', text: 'Data entry to QA/QC, Developer, then Senior Software Engineer', tier: 'bronze' },
       { title: 'B.Sc. Mathematics', text: 'Sourashtra College, Madurai, 2017', tier: 'bronze' },
     ],
@@ -434,22 +315,22 @@
     profiles: [
       {
         id: 'browse', name: 'Kumaran', line: 'The full story, in order', photo: true, badge: 'Main', art: 'ember',
-        order: ['about', 'story', 'lab', 'method', 'skills', 'trophies', 'core', 'websites'],
+        order: ['about', 'craft', 'story', 'lab', 'method', 'skills', 'trophies', 'core', 'websites'],
         hero: { kicker: 'Open to remote roles', primary: { label: 'Play trailer', act: 'trailer' }, secondary: { label: 'Start the story', href: '#story' } },
       },
       {
         id: 'recruiter', name: 'Recruiter', line: 'Numbers, trophies and skills first', glyph: 'R', icon: 'i-briefcase', art: 'blue',
-        order: ['about', 'trophies', 'skills', 'story', 'lab', 'method', 'core', 'websites'],
+        order: ['about', 'craft', 'trophies', 'skills', 'story', 'lab', 'method', 'core', 'websites'],
         hero: { kicker: 'Open to remote roles', primary: { label: 'Play trailer', act: 'trailer' }, secondary: { label: 'Open resume', href: '#/resume' } },
       },
       {
         id: 'client', name: 'Client', line: 'Websites and projects first', icon: 'i-spark', art: 'amber',
-        order: ['websites', 'lab', 'about', 'story', 'trophies', 'core', 'skills', 'method'],
+        order: ['websites', 'craft', 'lab', 'about', 'story', 'trophies', 'core', 'skills', 'method'],
         hero: { kicker: 'Available for projects', primary: { label: 'Start a project', mail: 'project' }, secondary: { label: 'Play trailer', act: 'trailer' } },
       },
       {
         id: 'engineer', name: 'Engineer', line: 'AI tools and how I build first', icon: 'i-code', art: 'green',
-        order: ['lab', 'method', 'skills', 'core', 'story', 'trophies', 'about', 'websites'],
+        order: ['lab', 'craft', 'method', 'skills', 'core', 'story', 'trophies', 'about', 'websites'],
         hero: { kicker: 'Open to remote roles', primary: { label: 'Open the AI Lab', href: '#lab' }, secondary: { label: 'Play trailer', act: 'trailer' } },
       },
     ],
@@ -457,38 +338,68 @@
     /* The "Continue exploring" tiles under the hero. Each one scrolls to its section. */
     sections: {
       about: { href: '#about', title: 'About me', k: 'The pilot', icon: 'i-user', art: 'slate', line: 'Who I am, in numbers' },
+      craft: { href: '#craft', title: 'What I do', k: '5 crafts', icon: 'i-spark', art: 'amber', line: 'Code, design, SEO, AI and servers' },
       story: { href: '#story', title: 'My Journey', k: '5 seasons', icon: 'i-story', art: 'ember', line: 'Career path, 2017 to now' },
       lab: { href: '#lab', title: 'AI Lab', k: '8 tools', icon: 'i-lab', art: 'blue', line: 'Three products, five utilities' },
       method: { href: '#method', title: 'How I build', k: 'Six rules', icon: 'i-code', art: 'green', line: 'Making AI output safe' },
       skills: { href: '#skills', title: 'Skill Universe', k: '38 skills', icon: 'i-skills', art: 'teal', line: 'What I work with' },
-      trophies: { href: '#trophies', title: 'Trophy Room', k: '7 trophies', icon: 'i-trophy', art: 'amber', line: 'Awards and milestones' },
+      trophies: { href: '#trophies', title: 'Trophy Room', k: '8 trophies', icon: 'i-trophy', art: 'amber', line: 'Awards and milestones' },
       core: { href: '#core', title: 'Core Five', k: 'Top five', icon: 'i-check', art: 'blue', line: 'What I am best at' },
       websites: { href: '#websites', title: 'Websites', k: '4 builds', icon: 'i-site', art: 'ember', line: 'Client work, names left out' },
       resume: { href: '#/resume', title: 'Resume', k: 'One page', icon: 'i-doc', art: 'slate', line: 'Printable summary' },
       contact: { href: '#contact', title: 'End Credits', k: 'Say hello', icon: 'i-mail', art: 'green', line: 'Email, phone and LinkedIn' },
     },
 
-    /* The three full products, with the text shown on their title pages */
+    /* The three full products: name, colour and demo video. Their card and popup words live in apps.js. */
     products: {
       gads: {
-        name: 'GAds Dashboard', k: 'Product 1 of 3', art: 'blue', icon: 'i-ads', demo: 'gads', line: 'Reports in under 1 minute',
-        synopsis: 'A Windows desktop app that audits and manages Google Ads accounts. Claude answers questions from live account data and writes ads you can publish in one click.',
-        facts: ['<b>1–2 hours → under 1 minute</b> for Google Ads reporting', '<b>85–95% less</b> manual optimisation effort', '<b>Built solo in about 6 weeks</b> with Claude Code', 'Audits, keyword tools, ad and asset builders, campaign managers, PDF and CSV reports'],
-        chips: ['Electron 40', 'React 18', 'Google Ads API', 'Claude API', 'Vitest'],
+        name: 'GAds Dashboard', k: 'Product 1 of 3', art: 'blue', icon: 'i-ads',
+        video: { src: 'assets/video/demo-gads.mp4', poster: 'assets/img/demo-gads.webp', length: '2:56', note: 'Screen recording. No sound, captions are on screen.' },
       },
       modernizer: {
-        name: 'Site Modernizer', k: 'Product 2 of 3', art: 'green', icon: 'i-site', demo: 'modernizer', line: 'Redesigns without losing rankings',
-        synopsis: 'Redesigns an existing website with a Tailwind design kit while keeping every title, meta tag, heading, link and form. A page that loses any of them fails its checks.',
-        facts: ['<b>10 designs</b>, all written in Tailwind only', 'Claude writes content against a <b>list of forbidden claims</b>', 'Real-browser, link, SEO and accessibility checks', 'Packages with a rollback. The original folder is never written to'],
-        chips: ['Node 22', 'Express', 'Electron', 'Tailwind', 'Claude API'],
+        name: 'Site Modernizer', k: 'Product 2 of 3', art: 'green', icon: 'i-site',
+        video: { src: 'assets/video/demo-modernizer.mp4', poster: 'assets/img/demo-modernizer.webp', length: '3:01', note: 'Screen recording with sound. Captions are on screen.' },
       },
       forms: {
-        name: 'Form and Lead Platform', k: 'Product 3 of 3', art: 'amber', icon: 'i-form', demo: 'forms', line: 'One login, many websites',
-        synopsis: 'A self-hosted form builder and lead tracker in PHP and MySQL. One login runs the forms, entries and notifications of many websites.',
-        facts: ['<b>20+ field types</b>, multi-step forms, conditional logic', 'Forms embed as <b>real HTML</b>, never an iframe', 'Webhooks with retries, 2FA, spam rules, ClamAV upload scanning', 'Scheduled backups, in-app updates and a monthly lead report'],
-        chips: ['PHP 8.1', 'MySQL', 'Version 2.4.0'],
+        name: 'Form and Lead Platform', k: 'Product 3 of 3', art: 'amber', icon: 'i-form',
+        video: { src: 'assets/video/demo-forms.mp4', poster: 'assets/img/demo-forms.webp', length: '2:31', note: 'Screen recording with sound. Captions are on screen.' },
       },
     },
+
+    /* "What I do": the five crafts. Each one is a panel with its own animated scene (the scenes are drawn in render.js).
+       `scene` picks which one: code | design | seo | ai | server. `facts` are [big number, label] pairs. */
+    craft: [
+      {
+        id: 'dev', scene: 'code', icon: 'i-code', art: 'blue', name: 'Software development',
+        line: 'Custom PHP and WordPress builds, Laravel apps and REST APIs, taken from the first requirement to production.',
+        facts: [['7+', 'years building websites'], ['50+', 'projects delivered']],
+        chips: ['PHP', 'WordPress', 'WooCommerce', 'Laravel', 'REST APIs', 'MySQL', 'JavaScript'],
+      },
+      {
+        id: 'design', scene: 'design', icon: 'i-pen', art: 'ember', name: 'Designing',
+        line: 'Page layouts and interfaces that hold up on a phone and on a desktop, for client websites and for the dashboards of my own tools.',
+        facts: [['14', 'hand-coded designs in Site Modernizer']],
+        chips: ['HTML5 / CSS3', 'Bootstrap', 'Tailwind CSS', 'Responsive layouts', 'Dashboards', 'Forms'],
+      },
+      {
+        id: 'seo', scene: 'seo', icon: 'i-chart', art: 'green', name: 'SEO',
+        line: 'Technical SEO and speed work: titles, canonicals, schema and Core Web Vitals, measured with GA4 and Search Console.',
+        facts: [['75 → 90+', 'average SEO score with my tool'], ['30+', 'sites tuned for Core Web Vitals']],
+        chips: ['Core Web Vitals', 'GA4 / GTM', 'Search Console', 'Schema', 'IndexNow', 'Canonical tags', 'Reports'],
+      },
+      {
+        id: 'ai', scene: 'ai', icon: 'i-spark', art: 'teal', name: 'AI-assisted development',
+        line: 'I build with Claude Code and the Claude API, then read, test and approve every change myself before it ships.',
+        facts: [['8', 'AI tools built and shipped'], ['~6 wks', 'to build GAds Dashboard, solo']],
+        chips: ['Claude Code', 'Claude API', 'Prompt engineering', 'Electron', 'Python', 'LLM cost control'],
+      },
+      {
+        id: 'server', scene: 'server', icon: 'i-server', art: 'slate', name: 'Servers and deployments',
+        line: 'Server set-ups, releases and day-to-day care, so client sites stay fast and stable and every change has a way back.',
+        facts: [['100+', 'sites supported'], ['30+', 'client sites kept fast and stable']],
+        chips: ['Server management', 'Deployments', 'Git / GitHub', 'Backups and rollback', 'Speed and uptime'],
+      },
+    ],
 
     /* "My core five" row */
     core: [
@@ -507,15 +418,17 @@
       { id: 'tracker', title: 'Scrap-price tracker', art: 'amber', icon: 'i-chart', k: 'Subscriptions', line: 'Price averages, 30-day change logic and paid subscriptions with Stripe.', chips: ['WooCommerce Subscriptions', 'Stripe', 'ACF'] },
     ],
 
-    /* Every trophy in the Trophy Room */
+    /* Every trophy in the Trophy Room. `img` is the background picture in assets/img/cards/ ('' = none yet).
+       To give the AI Fluency trophy a picture: save it as trophy-8.webp, set img: 'trophy-8' here and add 'trophy-8' to images.have. */
     trophies: [
-      { tier: 'gold', title: 'Best Employee Award', text: 'CG-VAK Software & Exports Ltd., 2023' },
-      { tier: 'silver', title: 'Claude Code in Action', text: 'Certification from Anthropic' },
-      { tier: 'silver', title: 'Senior Software Engineer', text: 'Promoted at CG-VAK, February 2024' },
-      { tier: 'silver', title: 'Eight AI tools shipped', text: 'Three products and five utilities, 2025 to now' },
-      { tier: 'bronze', title: 'Promoted to QA/QC', text: 'From data entry at SBL Knowledge Services' },
-      { tier: 'bronze', title: 'Promoted to Developer', text: 'At Galaxy Weblinks' },
-      { tier: 'bronze', title: 'B.Sc. Mathematics', text: 'Sourashtra College, Madurai, 2017' },
+      { tier: 'gold', title: 'Best Employee Award', text: 'CG-VAK Software & Exports Ltd., 2023', img: 'trophy-1' },
+      { tier: 'silver', title: 'Claude Code in Action', text: 'Certification from Anthropic', img: 'trophy-2' },
+      { tier: 'silver', title: 'AI Fluency: Framework & Foundations', text: 'Certificate of Completion from Anthropic, Sep 2026', img: '' },
+      { tier: 'silver', title: 'Senior Software Engineer', text: 'Promoted at CG-VAK, February 2024', img: 'trophy-3' },
+      { tier: 'silver', title: 'Eight AI tools shipped', text: 'Three products and five utilities, 2025 to now', img: 'trophy-4' },
+      { tier: 'bronze', title: 'Promoted to QA/QC', text: 'From data entry at SBL Knowledge Services', img: 'trophy-5' },
+      { tier: 'bronze', title: 'Promoted to Developer', text: 'At Galaxy Weblinks', img: 'trophy-6' },
+      { tier: 'bronze', title: 'B.Sc. Mathematics', text: 'Sourashtra College, Madurai, 2017', img: 'trophy-7' },
     ],
 
     /* The 30-second trailer: one idea per scene */

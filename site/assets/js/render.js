@@ -20,11 +20,14 @@
   /* background picture for a card, as CSS text for a style attribute ('' when the file is not listed in content.js) */
   function pic(name, scrim) {
     var I = C.images || {};
+    if (!name) return '';
     if (!(I.have === 'all' || (I.have && I.have.indexOf(name) >= 0))) return '';
     // a full URL: a relative one inside a CSS variable would be read from the stylesheet's folder (assets/css/), not the page's
     // scrim: a dark layer under the colour overlay so the text on the card stays readable
-    return '--img:' + (scrim ? 'linear-gradient(90deg, rgba(10, 10, 12, 0.68) 0%, rgba(10, 10, 12, 0.3) 55%, rgba(10, 10, 12, 0) 100%), ' : '') + 'url(' + new URL(I.base + name + '.webp', document.baseURI).href + ');';
+    return '--img-url:' + (scrim ? 'linear-gradient(90deg, rgba(10, 10, 12, 0.68) 0%, rgba(10, 10, 12, 0.3) 55%, rgba(10, 10, 12, 0) 100%), ' : '') + 'url(' + new URL(I.base + name + '.webp', document.baseURI).href + ');';
   }
+  /* an app's dashboard screenshot as a card or popup background (it sits ABOVE the colour overlay, see .orig in views.css) */
+  function appPic(id) { return pic('app-' + id); }
   /* scroll animation: kind = up | left | right | zoom | pop | title, i = stagger step, css = extra style text */
   function rv(kind, i, css) {
     var s = (i != null ? '--i:' + i + ';' : '') + (css || '');
@@ -51,7 +54,9 @@
 
   /* ---------- horizontal row with arrows ---------- */
   function track(title, items) {
-    return '<div class="row__track">' + items + '</div>' +
+    // a scroller with nothing focusable inside must itself be reachable by keyboard
+    var keys = /<(a|button)[ >]/.test(items) ? '' : ' tabindex="0" role="region" aria-label="' + esc(title) + ', scrollable"';
+    return '<div class="row__track"' + keys + '>' + items + '</div>' +
       '<button type="button" class="row__arrow row__arrow--prev" aria-label="Scroll ' + esc(title) + ' left" hidden>' + icon('i-chev-l') + '</button>' +
       '<button type="button" class="row__arrow row__arrow--next" aria-label="Scroll ' + esc(title) + ' right" hidden>' + icon('i-chev-r') + '</button>';
   }
@@ -90,8 +95,35 @@
       '<span class="orig__cta">Open details' + icon('i-arrow') + '</span></button>';
   }
 
+  /* ---------- AI Lab application cards and popups ----------
+     The card says what the app IS (a question to pull you in, one plain sentence, three things it does) and keeps the
+     result as a small footer. The popup tells the whole story. All the words are in apps.js. */
+  function appCard(id, o) {
+    var a = C.apps[id], c = a.card;
+    return '<button type="button" class="orig orig--app art-' + o.art + '"' + dataAttrs(o.data) + (o.rv || '') + '>' + icon(o.icon, 'orig__ico') +
+      '<span class="orig__k">' + esc(a.kind) + '</span><span class="orig__t">' + esc(o.t) + '</span>' +
+      '<span class="orig__hook">' + esc(c.hook) + '</span><span class="orig__m">' + esc(c.what) + '</span>' +
+      '<span class="orig__facts">' + c.points.map(function (f) { return '<span>' + esc(f) + '</span>'; }).join('') + '</span>' +
+      '<span class="orig__foot"><span class="orig__res"><i>Result</i><b>' + esc(c.result) + '</b></span><span class="orig__cta">See how it works' + icon('i-arrow') + '</span></span></button>';
+  }
+  function checks(items) { return '<ul class="title__facts">' + items.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>'; }
+  /* x.mid = extra markup between "How it works" and "Highlights" (the demo video, or a before/after visual) */
+  function detailHtml(id, x) {
+    var a = C.apps[id], d = a.detail, none = /^None/.test(d.ai);
+    return '<p class="dt__hook">' + esc(a.card.hook) + '</p><p class="title__syn">' + esc(d.what) + '</p>' +
+      '<div class="dt__two"><div><h4>The problem it solves</h4><p>' + esc(d.problem) + '</p></div><div><h4>Who it is for</h4><p>' + esc(d.who) + '</p></div></div>' +
+      '<div><h4>How it works</h4><ol class="dt__steps">' + d.steps.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ol></div>' +
+      ((x && x.mid) || '') +
+      '<div><h4>Highlights</h4><div class="dt__groups">' + d.groups.map(function (g) { return '<div class="dt__g"><h5>' + esc(g.h) + '</h5>' + checks(g.items) + '</div>'; }).join('') + '</div></div>' +
+      '<div><h4>Built to be safe</h4>' + checks(d.safety) + '</div>' +
+      '<div class="dt__ai' + (none ? ' dt__ai--none' : '') + '"><h4>' + (none ? 'AI inside? No' : 'Where AI fits') + '</h4><p>' + esc(d.ai) + '</p></div>' +
+      '<div><h4>Under the hood</h4><ul class="chips">' + d.tech.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul></div>' +
+      '<div><h4>By the numbers</h4><div class="dt__stats">' + d.stats.map(function (s) { return '<p class="dt__stat"><b>' + esc(s[0]) + '</b><span>' + esc(s[1]) + '</span></p>'; }).join('') + '</div></div>' +
+      '<div class="dt__cta"><p>Want something like this for your team?</p><a class="btn btn--ember" href="' + esc(C.mail.project) + '">' + icon('i-mail') + 'Email me about it</a></div>';
+  }
+
   function trophyCard(t, i) {
-    return '<article class="trophy trophy--' + t.tier + '"' + rv('pop', i % 4, pic('trophy-' + (i + 1), true)) + '>' + icon('i-trophy') + '<p class="trophy__tier">' + t.tier + '</p><h3 class="trophy__t">' + esc(t.title) + '</h3><p class="trophy__x">' + esc(t.text) + '</p></article>';
+    return '<article class="trophy trophy--' + t.tier + '"' + rv('pop', i % 4, pic(t.img, true)) + '>' + icon('i-trophy') + '<p class="trophy__tier">' + t.tier + '</p><h3 class="trophy__t">' + esc(t.title) + '</h3><p class="trophy__x">' + esc(t.text) + '</p></article>';
   }
 
   function chips(list, cls) {
@@ -126,13 +158,111 @@
 
   function statNum(v) { var m = /^(\d+)(.*)$/.exec(v); return m ? ' data-count="' + m[1] + '" data-suffix="' + esc(m[2]) + '"' : ''; }
 
+  /* ---------- "What I do": the animated scenes ----------
+     Pure HTML and CSS drawings (craft.css plays them). They are decorative, so screen readers skip them;
+     the text beside each one says the same thing in words. */
+  function sbar(title) { return '<div class="scene__bar"><i></i><i></i><i></i><span>' + esc(title) + '</span></div>'; }
+  /* one typed line: segs = [[class, text], ...], at = start (ms), ms = time per character. Returns the markup and when it ends. */
+  function tl(segs, at, ms) {
+    var n = segs.reduce(function (a, s) { return a + s[1].length; }, 0);
+    return {
+      html: '<div class="tl"><span class="tl__t" style="--c:' + n + ';--d:' + at + 'ms;--s:' + ms + 'ms">' +
+        segs.map(function (s) { return '<span class="' + s[0] + '">' + esc(s[1]) + '</span>'; }).join('') + '</span></div>',
+      end: at + n * ms,
+    };
+  }
+  function page(mobile, d0) {
+    function d(n) { return ' style="--d:' + (d0 + n) + 'ms"'; }
+    return '<div class="pg' + (mobile ? ' pg--m' : '') + '"><div class="pg__nav"><i class="logo"' + d(0) + '></i><b' + d(80) + '></b><b' + d(150) + '></b><b' + d(220) + '></b></div>' +
+      '<div class="pg__hero"><div class="pg__img"' + d(300) + '></div><div class="pg__copy"><i class="h"' + d(500) + '></i><i class="h s"' + d(580) + '></i><i class="t"' + d(660) + '></i><i class="t s"' + d(730) + '></i><span class="pbtn"' + d(900) + '>' +
+      (mobile ? '' : '<svg class="dz__cur" viewBox="0 0 24 24"><path d="M5 3l14 8-6 2 4 7-3 1.5-4-7-5 4z"/></svg><u class="dz__ring"></u>') + '</span></div></div>' +
+      (mobile ? '' : '<div class="pg__cards"><i' + d(1050) + '></i><i' + d(1120) + '></i><i' + d(1190) + '></i></div>') + '</div>';
+  }
+
+  var SCENES = {
+    code: function () {
+      var L = [
+        [['k', 'function '], ['f', 'getOrders'], ['p', '('], ['v', '$status'], ['p', ') {']],
+        [['p', '  '], ['v', '$rows'], ['p', ' = '], ['f', 'db'], ['p', '()->'], ['f', 'table'], ['p', '('], ['s', '\'orders\''], ['p', ')']],
+        [['p', '    ->'], ['f', 'where'], ['p', '('], ['s', '\'status\''], ['p', ', '], ['v', '$status'], ['p', ')']],
+        [['p', '    ->'], ['f', 'limit'], ['p', '('], ['n', '20'], ['p', ')->'], ['f', 'get'], ['p', '();']],
+        [['p', '  '], ['k', 'return '], ['f', 'array_map'], ['p', '('], ['s', '\'formatRow\''], ['p', ', '], ['v', '$rows'], ['p', ');']],
+        [['p', '}']],
+        [['c', '// 24 tests passed. Ready to ship.']],
+      ];
+      var t = 300, src = '', gut = '';
+      L.forEach(function (segs, i) { var r = tl(segs, t, 18); src += r.html; t = r.end + 140; gut += '<span>' + (i + 1) + '</span>'; });
+      return '<div class="scene scene--code" aria-hidden="true">' + sbar('orders.php') +
+        '<div class="ed"><div class="code__gut">' + gut + '</div><div class="code__src">' + src + '</div></div>' +
+        '<p class="code__ok" style="--d:' + t + 'ms">✓ 24 tests passed</p>' +
+        '<div class="scene__foot"><span><i class="live"></i>main</span><span>PHP 8.1</span></div></div>';
+    },
+
+    design: function () {
+      return '<div class="scene scene--design" aria-hidden="true">' + sbar('homepage layout') +
+        '<div class="dz"><div class="dz__desk">' + page(false, 150) + '</div>' +
+        '<div class="dz__phone">' + page(true, 2500) + '</div>' +
+        '<div class="dz__pal"><i style="--c:#ff3b2f;--d:3300ms"></i><i style="--c:#f5c04a;--d:3420ms"></i><i style="--c:#3ddc97;--d:3540ms"></i><i style="--c:#7cc4ff;--d:3660ms"></i><p style="--d:3800ms">Aa</p></div></div></div>';
+    },
+
+    seo: function () {
+      var items = ['Title and meta tags', 'Canonical tag', 'Schema markup', 'Image sizes', 'Core Web Vitals'];
+      return '<div class="scene scene--seo" aria-hidden="true">' + sbar('seo-report') +
+        '<div class="seo"><div class="seo__gauge"><svg viewBox="0 0 100 100"><circle class="trk" cx="50" cy="50" r="42"/><circle class="arc" cx="50" cy="50" r="42" pathLength="100"/></svg>' +
+        '<p class="seo__n"><span></span><em>+</em></p><small>SEO score</small></div>' +
+        '<ul class="seo__list">' + items.map(function (t, i) { return '<li style="--d:' + (500 + i * 380) + 'ms"><i></i>' + t + '</li>'; }).join('') + '</ul></div>' +
+        '<div class="seo__chart"><div class="seo__vitals"><b style="--d:2000ms">LCP</b><b style="--d:2300ms">INP</b><b style="--d:2600ms">CLS</b></div>' +
+        '<svg viewBox="0 0 300 70" preserveAspectRatio="none"><path class="area" d="M0 62 L30 58 L60 60 L90 50 L120 52 L150 40 L180 42 L210 28 L240 30 L270 16 L300 10 L300 70 L0 70 Z"/>' +
+        '<path class="line" pathLength="1" d="M0 62 L30 58 L60 60 L90 50 L120 52 L150 40 L180 42 L210 28 L240 30 L270 16 L300 10"/></svg></div></div>';
+    },
+
+    ai: function () {
+      var p = tl([['p', 'add a dry-run mode to the meta tag tool']], 250, 28);
+      return '<div class="scene scene--ai" aria-hidden="true">' + sbar('claude-code') +
+        '<div class="ai"><div class="ai__prompt"><b>&gt;</b>' + p.html + '</div>' +
+        '<p class="ai__work" style="--d:' + (p.end + 200) + 'ms"><i></i><i></i><i></i>Claude Code is working</p>' +
+        '<div class="ai__diff"><p class="del" style="--d:2900ms">- $meta = write_now($pages);</p><p class="add" style="--d:3100ms">+ $meta = preview($pages);</p><p class="add" style="--d:3300ms">+ write_files(only_if: approved);</p></div>' +
+        '<ul class="ai__checks"><li style="--d:3700ms">Tests pass</li><li style="--d:4000ms">Preview shows every change</li><li style="--d:4300ms">Nothing is written until I approve</li></ul>' +
+        '<div class="ai__stamp" style="--d:4800ms"><b>Reviewed</b><span>by Kumaran</span></div></div></div>';
+    },
+
+    server: function () {
+      var cmd = tl([['p', '$ '], ['f', 'git push origin main']], 250, 40), ticks = '';
+      for (var i = 0; i < 30; i++) ticks += '<i' + (i === 21 ? ' class="slow"' : '') + ' style="--i:' + i + '"></i>';
+      return '<div class="scene scene--srv" aria-hidden="true">' + sbar('production') +
+        '<div class="srv"><div class="srv__term">' + cmd.html +
+        '<p class="srv__ln" style="--d:1250ms">Deploying to production</p><div class="srv__bar" style="--d:1400ms"><i></i></div>' +
+        '<p class="srv__ln srv__ln--ok" style="--d:2750ms">✓ Cache cleared</p><p class="srv__ln srv__ln--ok" style="--d:3000ms">✓ Health checks passed</p>' +
+        '<p class="srv__ln srv__ln--ok" style="--d:3250ms">✓ Live. Backup taken, rollback ready.</p></div>' +
+        '<div class="srv__stat"><ul class="srv__list"><li><i class="live"></i>Web server<em>OK</em></li><li><i class="live"></i>Database<em>OK</em></li><li><i class="live"></i>Nightly backup<em>OK</em></li><li><i class="live"></i>SSL certificate<em>OK</em></li></ul>' +
+        '<div class="srv__up">' + ticks + '</div><small>Last 30 days</small></div></div></div>';
+    },
+  };
+
   var SECTIONS = {
+    /* five crafts as expanding panels. One is open at a time; each has a scene, a line, two numbers and a set of tools. */
+    craft: function () {
+      return sec('craft', '', '<div class="craft is-auto" data-craft' + rv('zoom') + '>' + C.craft.map(function (c, i) {
+        var on = i === 0;
+        return '<article class="disc art-' + c.art + (on ? ' is-on' : '') + '">' +
+          '<button type="button" class="disc__rail" id="cr-h-' + i + '" aria-expanded="' + on + '" aria-controls="cr-b-' + i + '">' +
+          '<span class="disc__n" aria-hidden="true">0' + (i + 1) + '</span><span class="disc__name">' + esc(c.name) + '</span>' + icon(c.icon, 'disc__ico') + '<span class="disc__chev" aria-hidden="true">' + icon('i-chev-r') + '</span></button>' +
+          '<i class="disc__bar" aria-hidden="true"></i>' +
+          '<div class="disc__body" id="cr-b-' + i + '" role="region" aria-labelledby="cr-h-' + i + '"><div class="disc__in">' +
+          '<div class="stage">' + SCENES[c.scene]() + '<button type="button" class="stage__replay" data-replay>' + icon('i-replay') + 'Replay</button></div>' +
+          '<div class="disc__txt"><h3 class="disc__t">' + esc(c.name) + '</h3><p class="disc__line">' + esc(c.line) + '</p></div>' +
+          '<div class="disc__more"><div class="disc__facts">' + c.facts.map(function (f) { return '<p class="fact"><b>' + esc(f[0]) + '</b><span>' + esc(f[1]) + '</span></p>'; }).join('') + '</div>' +
+          '<ul class="chips">' + c.chips.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div>' +
+          '</div></div></article>';
+      }).join('') + '</div>');
+    },
+
     about: function () {
       var A = C.about;
       return sec('about', '',
         '<div class="about"><figure class="about__quote"' + rv('left') + '><blockquote><p>“' + esc(A.quote) + '”</p></blockquote><figcaption>' + esc(A.by) + '</figcaption></figure>' +
         '<dl class="about__facts">' + A.facts.map(function (f, i) {
-          return '<div' + rv('right', i) + '><dt>' + esc(f[0]) + '</dt><dd>' + esc(f[1]) + '</dd>' + (f[2] ? '<small>' + esc(f[2]) + '</small>' : '') + '</div>';
+          return '<div' + rv('right', i) + '><dt>' + esc(f[0]) + '</dt><dd>' + esc(f[1]) + (f[2] ? '<small>' + esc(f[2]) + '</small>' : '') + '</dd></div>';
         }).join('') + '</dl></div>' +
         '<div class="stats">' + A.stats.map(function (s, i) { return '<div class="statbox"' + rv('zoom', i) + '><b' + statNum(s[0]) + '>' + esc(s[0]) + '</b><span>' + esc(s[1]) + '</span></div>'; }).join('') + '</div>');
     },
@@ -158,15 +288,14 @@
     lab: function () {
       var prods = ['gads', 'modernizer', 'forms'].map(function (id, i) {
         var p = C.products[id];
-        return orig({ art: p.art, icon: p.icon, k: p.k, t: p.name, m: p.line, facts: p.facts.slice(0, 2), data: { title: 'product:' + id }, rv: rv('zoom', i) });
+        return appCard(id, { art: p.art, icon: p.icon, t: p.name, data: { title: 'product:' + id }, rv: rv('zoom', i, appPic(id)) });
       }).join('');
       var utils = C.gadgets.map(function (g, i) {
-        return '<button type="button" class="util" data-title="short:' + esc(g.id) + '"' + rv('pop', i) + '>' + icon(g.icon, 'util__ico') +
-          '<span class="util__t">' + esc(g.name) + '</span><span class="util__fig">' + esc(g.figure) + '</span><span class="util__lab">' + esc(g.figureLabel) + '</span></button>';
+        return appCard(g.id, { art: g.art, icon: g.icon, t: g.name, data: { title: 'short:' + g.id }, rv: rv('zoom', i) });
       }).join('');
       return sec('lab', '',
-        '<h3 class="sub-title"' + rv('up') + '>Three full products <span>Playable demos on fictional data</span></h3><div class="orig-grid orig-grid--3">' + prods + '</div>' +
-        '<h3 class="sub-title"' + rv('up') + '>Five utilities <span>Each one does one job</span></h3><div class="util-grid">' + utils + '</div>');
+        '<h3 class="sub-title"' + rv('up') + '>Three full products <span>' + (C.demoVideos ? 'Each has a demo video' : 'Each one a full application') + '</span></h3><div class="orig-grid orig-grid--3">' + prods + '</div>' +
+        '<h3 class="sub-title"' + rv('up') + '>Five utilities <span>Each one does one job</span></h3><div class="orig-grid orig-grid--5">' + utils + '</div>');
     },
 
     method: function () {
@@ -286,7 +415,7 @@
       '<a class="btn btn--ember" href="' + esc(C.mail.hiring) + '">' + icon('i-mail') + 'Email about a role</a>' +
       '<a class="btn btn--ghost" href="#top">' + icon('i-chev-l') + 'Back to the portfolio</a></div>' +
       '<article class="paper"><h1 id="h-resume" tabindex="-1">' + esc(P.name) + '</h1><p class="paper__role">AI automation engineer</p>' +
-      '<p class="paper__contact">' + esc(P.place) + ' · ' + esc(P.phoneDisplay) + ' · ' + esc(P.email) + ' · ' + esc(P.linkedin.replace('https://www.', '')) + '</p>' +
+      '<p class="paper__contact">' + esc(P.place) + ' · ' + esc(P.phoneDisplay) + ' · ' + esc(P.email) + ' · ' + esc(P.linkedin.replace('https://www.', '').replace(/\/$/, '')) + '</p>' +
       '<p class="paper__sum">Seven years of PHP and WordPress delivery, now building Claude-powered desktop tools. One of them cut Google Ads reporting from 1–2 hours to under a minute. Open to remote roles.</p>' +
       '<div class="paper__facts">' + C.about.stats.map(function (s) { return '<div><b>' + esc(s[0]) + '</b><span>' + esc(s[1]) + '</span></div>'; }).join('') + '</div>' +
       '<h3>Experience</h3><ul>' + exp + '</ul>' +
@@ -299,23 +428,25 @@
     var dlg = $('#title');
     if (!dlg || !dlg.showModal) return;
     var parts = spec.split(':'), kind = parts[0], id = parts[1];
-    var banner = $('[data-t-banner]', dlg), body = $('[data-t-body]', dlg), demoName = null;
-    var art = 'slate', k = '', name = '', html = '';
+    var banner = $('[data-t-banner]', dlg), body = $('[data-t-body]', dlg);
+    var art = 'slate', k = '', name = '', html = '', bg = '';
 
     if (kind === 'product') {
-      var p = C.products[id]; if (!p) return;
-      art = p.art; k = p.k; name = p.name; demoName = p.demo;
-      html = '<p class="title__syn">' + esc(p.synopsis) + '</p><ul class="title__facts">' + p.facts.map(function (f) { return '<li>' + f + '</li>'; }).join('') + '</ul>' +
-        '<ul class="chips">' + p.chips.map(function (c) { return '<li>' + esc(c) + '</li>'; }).join('') + '</ul>' +
-        '<div class="title__demo"><h4>Try it</h4><div data-demo></div></div>';
+      var p = C.products[id]; if (!p || !C.apps[id]) return;
+      art = p.art; k = p.k + ' · ' + C.apps[id].kind; name = p.name;
+      bg = appPic(id);   // a screenshot of the app's dashboard page under the colour overlay
+      // the demo video: nothing is downloaded until the visitor presses play
+      html = detailHtml(id, { mid: (C.demoVideos && p.video) ? '<div class="title__demo"><h4>Watch the demo <small>' + esc(p.video.length) + '</small></h4>' +
+        '<video class="title__video" controls playsinline preload="none" width="1280" height="720" poster="' + esc(p.video.poster) + '" aria-label="' + esc(p.name) + ' demo video">' +
+        '<source src="' + esc(p.video.src) + '" type="video/mp4"></video>' +
+        '<p class="title__note">' + esc(p.video.note) + '</p></div>' : '' });
     } else if (kind === 'short') {
-      var g = C.gadgets.filter(function (x) { return x.id === id; })[0]; if (!g) return;
-      art = 'slate'; k = 'Utility'; name = g.name;
-      html = '<p class="title__syn">' + esc(g.what) + '</p><div class="bigfig"><b>' + esc(g.figure) + '</b><span>' + esc(g.figureLabel) + '</span></div>';
-      if (g.bars) html += '<div class="mbars">' + g.bars.map(function (b, i) { return '<div><div class="mbar__row"><span>' + esc(b[0]) + '</span><span>' + esc(b[2]) + '</span></div><div class="mbar"><span class="mbar__fill mbar__fill--' + (i === 0 ? 'manual' : 'auto') + '" style="--w:' + b[1] + '%"></span></div></div>'; }).join('') + '</div>';
-      if (g.demo && g.demo.type === 'code') html += '<pre class="code" aria-label="Example change">' + g.demo.lines.map(function (l) { return l[0] === '+' ? '<span class="add">+ ' + esc(l[1]) + '</span>' : esc('  ' + l[1]) + '\n'; }).join('') + '</pre>';
-      if (g.demo && g.demo.type === 'steps') html += '<ul class="steps">' + g.demo.items.map(function (t) { return '<li>' + icon('i-check') + esc(t) + '</li>'; }).join('') + '</ul>';
-      html += '<p class="title__syn">' + esc(g.meta) + '</p>';
+      var g = C.gadgets.filter(function (x) { return x.id === id; })[0]; if (!g || !C.apps[id]) return;
+      art = g.art || 'slate'; k = 'Utility · ' + C.apps[id].kind; name = g.name;
+      var mid = '';
+      if (g.bars) mid = '<div><h4>Before and after</h4><div class="mbars">' + g.bars.map(function (b, i) { return '<div><div class="mbar__row"><span>' + esc(b[0]) + '</span><span>' + esc(b[2]) + '</span></div><div class="mbar"><span class="mbar__fill mbar__fill--' + (i === 0 ? 'manual' : 'auto') + '" style="--w:' + b[1] + '%"></span></div></div>'; }).join('') + '</div></div>';
+      if (g.demo && g.demo.type === 'code') mid = '<div><h4>What it changes</h4><pre class="code" aria-label="Example change">' + g.demo.lines.map(function (l) { return l[0] === '+' ? '<span class="add">+ ' + esc(l[1]) + '</span>' : esc('  ' + l[1]) + '\n'; }).join('') + '</pre></div>';
+      html = detailHtml(id, { mid: mid });
     } else if (kind === 'website') {
       var w = C.websites.filter(function (x) { return x.id === id; })[0]; if (!w) return;
       art = w.art; k = w.k; name = w.title;
@@ -324,14 +455,18 @@
         '<a class="btn btn--ember" href="' + esc(C.mail.project) + '">' + icon('i-mail') + 'Email about a similar project</a>';
     } else { return; }
 
-    banner.className = 'title__banner art-' + art;
+    banner.className = 'title__banner art-' + art + (bg ? ' img-on' : '');
+    banner.style.cssText = bg;   // cleared for the other kinds so a product's picture never carries over
     $('[data-t-k]', dlg).textContent = k;
     $('[data-t-name]', dlg).textContent = name;
     body.innerHTML = html;
-    if (demoName && AQ.labs) AQ.labs.mount(demoName, $('[data-demo]', body));
     if (!dlg.open) dlg.showModal();
     dlg.scrollTop = 0;
   }
+
+  // closing a title page stops its video and drops it, so nothing keeps playing or downloading in the background
+  var titleDlg = $('#title');
+  if (titleDlg) titleDlg.addEventListener('close', function () { var b = $('[data-t-body]', titleDlg); if (b) b.innerHTML = ''; });
 
   AQ.render = { home: renderHome, hero: renderHero, resume: renderResume, openTitle: openTitle, profile: profile };
 })();

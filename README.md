@@ -18,13 +18,26 @@ dependencies. Only that folder is ever published.
   Optional animated video (below).
 - **Animated cursor (mouse users only).** A ring trails the pointer. Over cards it becomes a red disc with a
   play triangle, over buttons and links it grows. It sits above the detail windows too. Touch screens are unaffected.
+- **What I do (the attention-seeking section, right after About).** Five panels side by side: Software development,
+  Designing, SEO, AI-assisted development, Servers and deployments. The open panel grows and plays its own animated
+  scene: code typing itself and the tests passing, a wireframe being painted in with a cursor click and a phone
+  version, an SEO score climbing with checks ticking, a prompt turning into a reviewed change with a "Reviewed by
+  Kumaran" stamp, a deploy with a server status panel. They open on click (or hover on a laptop), open one after
+  another on their own (a thin bar along the top shows the time) until you touch them, lean towards the mouse, and
+  have a Replay button. A scene only runs while it is open and on screen, and runs again each time it comes back.
+  Under 1100 px the panels stack as an accordion. Reduced-motion visitors see the finished pictures. The scenes are pure
+  HTML and CSS (no GIF files), so they are sharp and tiny.
 - **Skill universe is tabs.** One tab per skill group (a list on a laptop, a swipeable row on a phone),
   arrow keys, Home and End work, and the skills show as tiles.
 - **One long scroll.** About me, My journey (all five seasons printed in full, with the skills picked up
   in each), AI Lab, How I build with AI, Skill universe, Trophy room, My core five, Websites I've built and
   the End credits. Nothing in these sections needs a click.
 - **Click-to-open details are projects only.** The three AI products, the five utilities and the four
-  websites open a title page. The three products have a working demo on fictional data.
+  websites open a title page. Each AI Lab card says what the app IS (a hook question, one plain sentence, three
+  things it does, the result as a small footer). Its popup tells the whole story: the problem, who it is for, how it
+  works step by step, highlights, what keeps it safe, where AI is (and is not) used, the tech, the numbers. The three
+  products show a demo video there (nothing downloads until you press play). The words come from reading the real
+  applications and contain no client names, employer brand or source code.
 - **Motion on every scroll, in and out.** Titles are unmasked as they enter, cards rise, slide, zoom or pop in
   one after another, then drift away as they leave, and the same plays backwards when you scroll up. Each
   section has a glow and a big outlined number that move at their own speed, the hero lifts away, the
@@ -40,8 +53,9 @@ dependencies. Only that folder is ever published.
   `marquee` in the same file. Visitors who prefer reduced motion get none of it.
 - **One fixed-width column.** Sections sit in a centred container (`--wrap`, 1280 px, set at the top of
   `base.css`). The menu, hero text, scrolling rows and footer line up with it on any screen size.
-- **Navigation.** Journey, AI Lab, Skills, Trophies and Contact scroll to their section and the menu
-  highlights where you are. The "Continue exploring" tiles under the hero do the same.
+- **Navigation.** What I do, Journey, AI Lab, Skills, Trophies and Contact scroll to their section and the menu
+  highlights where you are. A LinkedIn icon sits in the menu bar on wide screens (`person.linkedin` in `content.js`
+  is the one place to change the address; it is also in the footer, the End credits, the resume and the search-engine data in `index.html`). The "Continue exploring" tiles under the hero do the same.
 - **Resume.** Its own printable page (`#/resume`) with Print or save as PDF.
 - **Trailer.** A 25-second story-style sequence with progress bars, pause, previous and next.
 - **Phones.** Bottom tab bar, swipeable rows, same content.
@@ -55,8 +69,7 @@ site/                  the public website (the only thing deployed)
     js/content.js      ALL text, numbers, dates, skills, profiles, trophies, hero video. Edit facts here.
     js/render.js       builds the sections, resume and title pages from the content
     js/app.js          intro, profile chooser, scrolling, hero video, trailer, dialogs
-    js/labs.js         the three demo apps (fictional data)
-    css/               base.css (tokens, nav, cards, dialogs, intro), views.css (hero and sections), labs.css (demo apps)
+    css/               base.css (tokens, nav, cards, dialogs, intro), views.css (hero and sections)
     fonts/, img/       self-hosted fonts and photos (works behind office firewalls)
     video/             create this folder for your hero clip (see below)
 archive/               earlier versions, kept for reference and never published
@@ -120,18 +133,54 @@ out with the clean background; to remake the loop, repeat the same steps with a 
 
 | To change | Edit |
 |---|---|
-| Career seasons, bullets, dates, skills, tools, utilities | `site/assets/js/content.js` (`journey`, `skills`, `tools`, `gadgets`) |
+| Career seasons, bullets, dates, skills, tools | `site/assets/js/content.js` (`journey`, `skills`, `tools`) |
+| The eight AI Lab apps: card text and popup text | `site/assets/js/apps.js`. Each app has `kind`, `card` (hook, what, 3 points, result) and `detail` (what, problem, who, steps, highlight groups, safety, AI note, tech chips, numbers). Colours, icons, demo videos and the small before/after visuals are in `products` and `gadgets` in `content.js` |
 | Title screen text, About quote and facts, section headings | `intro`, `about`, `blocks` in `content.js` |
 | The three chips around your photo | `hero.chips` in `content.js` (`pos`: `left`, `right`, `br`) |
 | Profiles and the order of sections for each | `profiles` (`order`) in `content.js` |
+| The five crafts in "What I do": names, one-liners, numbers, tool chips | `craft` in `content.js`. The animated scenes are drawn in `SCENES` in `render.js` and styled and timed in `site/assets/css/craft.css` (the delays are `--d` values in milliseconds) |
 | Websites built, core five, trophies, trailer scenes, credits | `websites`, `core`, `trophies`, `trailer`, `credits` in `content.js` |
 | Phone, email, LinkedIn, the two prefilled email templates | `person` and `mail` in `content.js` |
 | Hero wording | `site/index.html` (the `hero` block) |
 | Colours, container width (`--wrap`) | the `:root` block at the top of `site/assets/css/base.css` |
 | Which block animates how | `data-reveal` (`up`, `left`, `right`, `zoom`, `pop`, `title`) in `render.js`; the moves are in `views.css` |
 
-Product names are generic and all demo data is fictional. Keep it that way: no client names,
+## The product demo videos
+
+The three product pages (GAds Dashboard, Site Modernizer, Form and Lead Platform) each play a demo video:
+`site/assets/video/demo-gads.mp4`, `demo-modernizer.mp4`, `demo-forms.mp4` (720p, 3 to 9 MB each) with a
+poster image in `site/assets/img/demo-*.webp`. They are listed under `products` in `content.js` (`video`: file,
+poster, length, note). The full-size originals stay in the project root and are not published. To replace one,
+re-encode the new recording the same way:
+```
+ffmpeg -i new.mp4 -vf "scale=1280:-2,format=yuv420p" -c:v libx264 -crf 27 -preset medium -c:a aac -b:a 64k -movflags +faststart site/assets/video/demo-gads.mp4
+```
+To remove a video, delete its `video:` line in `content.js`.
+
+**Videos are switched off for now.** `demoVideos: false` in `content.js` hides them, and `.gitignore` keeps the three
+`demo-*.mp4` files and their `demo-*.webp` posters out of git, so they are not published. Once you have checked what is
+on screen (employer logo, account names, a real client), set `demoVideos: true`, delete the two `demo-` lines from
+`.gitignore`, commit the files and push.
+
+Product names are generic. Before you publish a video, check what is on screen: no real client names, account IDs, phone numbers, addresses or photos of real people, and no credentials. Keep it that way: no client names,
 account IDs, screenshots or source code of the real tools in `site/`.
+
+## Search engines and no-JavaScript readers
+
+The page is drawn by JavaScript, so `site/index.html` also carries a plain-text copy of all the content inside
+`<noscript>` (about, what I do, all eight apps in full, journey, skills, trophies, websites). `site/sitemap.xml` and
+`site/404.html` are there too. After you change `content.js` or `apps.js`, refresh the copy and the sitemap date:
+
+```
+node tools/make-static.mjs
+```
+
+(Node only, no packages.) `robots.txt` is not included on purpose: a project site such as `/portfolio/` is not allowed
+to serve one (crawlers only read it at the root of `kumaranms7.github.io`). Add it if you move to your own domain, and
+submit `sitemap.xml` in Google Search Console.
+
+Speed: the card pictures load only as they near the screen, the main fonts are preloaded, and the footer is held below the fold
+until the sections are drawn (this keeps layout shift at 0).
 
 ## Photos
 
@@ -154,19 +203,27 @@ panels and the Trophies. The current colour overlay stays on top of each picture
 picture keeps its plain colour.
 
 1. Put WebP files in `site/assets/img/cards/` with exactly these names:
-   - Continue exploring: `about`, `story`, `lab`, `method`, `skills`, `trophies`, `core`, `websites`, `resume`, `contact`
+   - Continue exploring: `about`, `story`, `lab`, `method`, `skills`, `trophies`, `core`, `websites`, `resume`, `contact`, and `craft` (the new "What I do" tile, no picture yet)
    - Journey seasons: `season-1` to `season-5` (Data entry to QA/QC, Developer, Software Engineer, Senior Engineer, AI automation)
-   - Trophies: `trophy-1` to `trophy-7` (in the order they appear on the page)
+   - Trophies: `trophy-1` to `trophy-7`. Each trophy in `content.js` names its own picture (`img`), so adding a trophy
+     never shifts the pictures. The AI Fluency certificate has `img: ''` (no picture yet): save one as `trophy-8.webp`, set `img: 'trophy-8'` on it and add `'trophy-8'` to `have`.
    For example `site/assets/img/cards/about.webp`.
-2. In `site/assets/js/content.js`, find `images:` and list the files you have, for example
-   `have: ['about', 'story', 'season-1']`, or write `have: 'all'` once all 22 are there.
+2. In `site/assets/js/content.js`, find `images:` and list the files you have in `have` (it is a list now, so a name with no
+   file never causes a failed download). Add `'craft'` once `cards/craft.webp` exists.
 3. To make the colour stronger or weaker, change the blend in `base.css`: `--blend` for the cards and seasons
    (default `overlay`; try `multiply` for stronger colour, `soft-light` for weaker) and `--blend-t` for the trophies.
 
 Keep each file under about 120 KB (1280 px wide for the cards, 1000 px for the seasons, 1200 px for the trophies).
-All 22 are in and switched on (`have: 'all'`). The full-size originals are in `card-originals/` (not published); the
+All 22 of the first three groups are in and switched on. The full-size originals are in `card-originals/` (not published); the
 files in `site/` are the lighter copies (cards resized to 1280 px, trophies brightened because the originals are very dark).
 To swap one, put the new file in `site/assets/img/cards/` with the same name.
+
+The three AI Lab product cards and their popup banners use a screenshot of each app's dashboard page:
+`app-gads.webp`, `app-modernizer.webp`, `app-forms.webp` (same folder, about 1200 px wide, 15 to 30 KB). They sit on
+top of the card colour and are blended into it (`overlay`, set by `--blend` on `.orig` in `views.css` and on
+`.title__banner` in `base.css`). They were cropped from frames of the demo videos so that the company logo, any
+client name and the caption pills are out of the picture. When you swap one, crop it the same way. The three `app-`
+names are in `have` already.
 
 ## Publish on GitHub Pages
 

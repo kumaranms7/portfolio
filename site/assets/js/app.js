@@ -21,7 +21,10 @@
 
   doc.setAttribute('data-fx', C.fx || 'wild');
 
-  function applyMail(root) { $$('[data-mail]', root).forEach(function (a) { a.href = C.mail[a.getAttribute('data-mail')] || a.href; }); }
+  function applyMail(root) {
+    $$('[data-mail]', root).forEach(function (a) { a.href = C.mail[a.getAttribute('data-mail')] || a.href; });
+    $$('[data-linkedin]', root).forEach(function (a) { a.href = C.person.linkedin; });   // one place to change it: person.linkedin in content.js
+  }
   applyMail(document);
 
   /* ---------- motion helpers (the main scroll animation is pure CSS, see views.css) ---------- */
@@ -62,6 +65,21 @@
     nums.forEach(function (n) { countIO.observe(n); });
   }
 
+  /* ---------- card pictures: download only when a card is near the screen (saves about 1 MB on a phone) ---------- */
+  function initLazyImages() {
+    var els = $$('[style*="--img-url"]', $('[data-view="home"]'));
+    if (!('IntersectionObserver' in window)) { els.forEach(function (e) { e.classList.add('img-on'); }); return; }
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        // a scrolling row loads all its cards at once, so none flashes plain when you scroll sideways
+        var tr = e.target.closest('.row__track'), group = tr ? $$('[style*="--img-url"]', tr) : [e.target];
+        group.forEach(function (g) { g.classList.add('img-on'); io.unobserve(g); });
+      });
+    }, { rootMargin: '600px 0px' });
+    els.forEach(function (e) { io.observe(e); });
+  }
+
   /* ---------- skill tabs: arrow keys, selection follows focus, find-in-page opens the right tab ---------- */
   // (The native focusgroup attribute only moves focus along one axis; these tabs run down on a laptop and across on a phone.)
   function initTabs() {
@@ -97,6 +115,79 @@
       e.preventDefault();
       tabs[to].focus();
     });
+  }
+
+  /* ---------- What I do: five panels, one open at a time ----------
+     Click (or hover on a laptop) a panel to open it. On a laptop they also open one after another until you touch them.
+     A scene only animates while its panel is open and on screen; it plays again every time it comes back. */
+  function initCraft() {
+    var root = $('[data-craft]');
+    if (!root) return;
+    var discs = $$('.disc', root), cur = 0, seen = false, auto = !reduced(), hoverT = 0;
+    var wide = window.matchMedia ? window.matchMedia('(min-width: 1101px)') : { matches: true };
+    function scene(i) { return $('.scene', discs[i]); }
+    function stop(i) { var s = scene(i); if (s) { s.classList.remove('is-run'); s.style.transform = ''; } }
+    function run(i) {
+      var s = scene(i);
+      if (!s) return;
+      s.classList.remove('is-run');
+      void s.offsetWidth;                                   // restart the animations from the first frame
+      if (seen && !reduced()) s.classList.add('is-run');
+    }
+    function select(i, byUser) {
+      if (byUser && auto) { auto = false; root.classList.remove('is-auto'); }
+      if (i === cur && discs[i].classList.contains('is-on')) return;
+      discs.forEach(function (d, k) {
+        d.classList.toggle('is-on', k === i);
+        $('.disc__rail', d).setAttribute('aria-expanded', k === i ? 'true' : 'false');
+      });
+      stop(cur); cur = i; run(i);
+    }
+    root.addEventListener('click', function (e) {
+      var rep = e.target.closest('[data-replay]');
+      if (rep) { run(cur); return; }
+      var rail = e.target.closest('.disc__rail');
+      if (rail) select(discs.indexOf(rail.closest('.disc')), true);
+    });
+    // laptop: hovering a closed panel opens it after a short pause, so crossing the row does not flicker
+    root.addEventListener('pointerover', function (e) {
+      if (e.pointerType !== 'mouse' || !wide.matches) return;
+      var rail = e.target.closest('.disc__rail');
+      clearTimeout(hoverT);
+      if (!rail) return;
+      var i = discs.indexOf(rail.closest('.disc'));
+      if (i !== cur) hoverT = setTimeout(function () { select(i, true); }, 160);
+    });
+    root.addEventListener('pointerleave', function () { clearTimeout(hoverT); });
+    // the open scene leans towards the pointer
+    var raf = 0;
+    root.addEventListener('pointermove', function (e) {
+      if (e.pointerType !== 'mouse' || reduced()) return;
+      var st = e.target.closest('.stage'), s = st && st.closest('.disc.is-on') && $('.scene', st);
+      if (!s) return;
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(function () {
+        var r = st.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+        s.style.transform = 'rotateY(' + (x * 7).toFixed(2) + 'deg) rotateX(' + (-y * 6).toFixed(2) + 'deg)';
+      });
+    });
+    root.addEventListener('pointerout', function (e) {
+      var st = e.target.closest('.stage');
+      if (st && !st.contains(e.relatedTarget)) { cancelAnimationFrame(raf); var s = $('.scene', st); if (s) s.style.transform = ''; }
+    });
+    // the story bar finished: open the next craft (laptop only)
+    root.addEventListener('animationend', function (e) {
+      if (e.animationName === 'craft-bar' && auto && wide.matches) select((cur + 1) % discs.length, false);
+    });
+    // play only while the section is on screen; leaving and coming back plays it again
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (es) {
+        seen = es[0].isIntersecting;
+        root.classList.toggle('is-live', seen);
+        if (seen) run(cur); else stop(cur);
+      }, { threshold: 0.3 }).observe(root);
+    }
+    if (!auto) root.classList.remove('is-auto');
   }
 
   /* ---------- End credits poster video: loads when you scroll near it, plays only while on screen ---------- */
@@ -159,8 +250,8 @@
     function kind(t) {
       if (!t || !t.closest) return '';
       if (t.closest('input, textarea, select, [contenteditable]')) return 'off';
-      if (t.closest('[data-title], .card:not(.card--static), .orig, .util, .profile')) return 'play';
-      if (t.closest('a, button, [role="tab"], summary')) return 'link';
+      if (t.closest('[data-title], .card:not(.card--static), .orig, .profile')) return 'play';
+      if (t.closest('a, button, [role="tab"], summary, video')) return 'link';
       return '';
     }
     function tick(now) {
@@ -245,7 +336,9 @@
     applyMail($('[data-view="home"]'));
     splitText();
     initMotion();
+    initLazyImages();
     initTabs();
+    initCraft();
     initPosterVideo();
     watchSpy();
     if (location.hash && /^#[a-z]+$/.test(location.hash)) goTo(location.hash.slice(1), false);

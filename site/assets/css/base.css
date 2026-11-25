@@ -29,16 +29,6 @@
   --good: #3ddc97;
   --cyan: #7cc4ff;
 
-  /* names used by the demo-app styles */
-  --glass-2: rgba(20, 20, 26, 0.8);
-  --panel: var(--glass-2);
-  --line: var(--stroke);
-  --line-2: var(--stroke-2);
-  --green: var(--good);
-  --amber: var(--gold);
-  --orange: #ff8a4d;
-  --red: #ff6b7a;
-
   --f-display: 'Bebas Neue', Impact, 'Arial Narrow', sans-serif;
   --f-body: 'Inter', system-ui, 'Segoe UI', sans-serif;
   --f-serif: 'Playfair Display', Georgia, serif;
@@ -76,6 +66,12 @@ p { margin: 0; }
 .ico { width: 1.2em; height: 1.2em; flex: none; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .ico--fill { fill: currentColor; stroke: none; }
 .noscript { padding: calc(var(--nav) + 40px) var(--gut) 40px; color: var(--ink-2); max-width: 60ch; }
+.noscript--static { max-width: 78ch; line-height: 1.55; }   /* the plain-text copy of the whole site (tools/make-static.mjs) */
+.noscript--static h2 { margin: 2.2rem 0 0.6rem; font: 400 2rem / 1 var(--f-display); letter-spacing: 0.02em; text-transform: uppercase; color: #fff; }
+.noscript--static h3 { margin: 1.5rem 0 0.4rem; color: #fff; }
+.noscript--static h4 { margin: 1rem 0 0.3rem; color: var(--ember-2); }
+.noscript--static ul, .noscript--static ol { padding-left: 1.2rem; }
+.noscript--static a { color: var(--cyan); }
 
 /* film grain: a still overlay, not an animation. No blend mode: a full-screen blend layer makes the browser re-mix the whole page every frame. */
 .grain {
@@ -142,6 +138,9 @@ p { margin: 0; }
 .nav__links a:is(:target-current, .target-current, [aria-current='page']) { color: #fff; font-weight: 600; }
 .nav__links a:is(:target-current, .target-current, [aria-current='page'])::after { content: ''; position: absolute; left: 12px; right: 12px; bottom: 2px; height: 2px; border-radius: 2px; background: var(--ember); }
 .nav__right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.nav__right .iconbtn { width: 38px; height: 38px; color: #fff; }
+.foot__link { color: var(--ink-2); text-underline-offset: 3px; }
+.foot__link:hover { color: #fff; }
 .avatar { width: 38px; height: 38px; flex: none; padding: 0; border: 2px solid transparent; border-radius: 6px; overflow: hidden; cursor: pointer; background: linear-gradient(145deg, #4a0707, #ff5a3c); transition: border-color 0.2s, transform 0.2s var(--ease); }
 .avatar img { width: 100%; height: 100%; object-fit: cover; }
 .avatar:hover { border-color: #fff; transform: scale(1.06); }
@@ -294,7 +293,7 @@ dialog::backdrop { background: rgba(0, 0, 0, 0.78); overflow: hidden; overscroll
   display: block; width: min(920px, calc(100% - 24px)); max-height: min(92dvh, 920px); margin: auto; overflow: hidden auto;
   background: var(--surface); border: 1px solid var(--stroke); border-radius: 14px; box-shadow: 0 40px 120px rgba(0, 0, 0, 0.85);
 }
-.title__banner { position: relative; display: flex; flex-direction: column; justify-content: flex-end; min-height: 250px; padding: 28px; background: var(--art, var(--surface-2)); isolation: isolate; }
+.title__banner { position: relative; display: flex; flex-direction: column; justify-content: flex-end; min-height: 250px; padding: 28px; background: var(--img, none) 50% 0 / cover no-repeat, var(--art, var(--surface-2)); background-blend-mode: var(--blend, overlay), normal, normal; isolation: isolate; }
 .title__banner::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(0, 0, 0, 0.08), rgba(22, 22, 27, 0.98)); }
 .title__close { position: absolute; top: 14px; right: 14px; background: rgba(0, 0, 0, 0.55); }
 .title__k { font: 600 0.74rem var(--f-body); letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255, 255, 255, 0.85); }
@@ -306,9 +305,40 @@ dialog::backdrop { background: rgba(0, 0, 0, 0.78); overflow: hidden; overscroll
 .title__facts li { position: relative; padding-left: 1.6rem; color: var(--ink-2); }
 .title__facts li::before { content: ''; position: absolute; left: 0; top: 0.35em; width: 1em; height: 1em; border-radius: 50%; background: rgba(61, 220, 151, 0.18) url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233ddc97' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 12.5 4 4 8-9'/%3E%3C/svg%3E") center / 70% no-repeat; }
 .title__facts b { color: #fff; font-weight: 600; }
+/* card pictures load as they near the screen: pic() sets --img-url, initLazyImages() adds .img-on */
+.img-on { --img: var(--img-url); }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
 .chips li { padding: 6px 14px; border-radius: 999px; font-size: 0.8rem; font-weight: 500; color: var(--cyan); background: rgba(124, 196, 255, 0.1); border: 1px solid rgba(124, 196, 255, 0.28); }
 .title__demo { padding-top: 4px; }
+.title__demo h4 small { margin-left: 0.6em; color: var(--ink-3); font: 500 0.78rem var(--f-body); letter-spacing: 0; text-transform: none; }
+.title__video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; border: 1px solid var(--stroke); border-radius: 12px; background: #000; }
+.title__note { margin-top: 0.6rem; color: var(--ink-3); font-size: 0.84rem; }
+
+/* application popup (AI Lab): what it is, the problem, how it works, highlights, safety, AI, tech, numbers */
+.dt__hook { max-width: 40em; margin: 0; font: italic 500 clamp(1.25rem, 2.4vw, 1.65rem) / 1.3 var(--f-serif); color: #fff; }
+.dt__two { display: grid; grid-template-columns: 1.5fr 1fr; gap: 14px; }
+.dt__two > div { padding: 16px 18px; border-radius: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--stroke); }
+.dt__two p { margin: 0; color: var(--ink-2); }
+.dt__steps { counter-reset: s; margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; }
+.dt__steps li { counter-increment: s; position: relative; min-height: 32px; padding: 4px 0 0 46px; color: var(--ink-2); }
+.dt__steps li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; background: var(--ember); color: #fff; font: 400 1.2rem / 1 var(--f-display); padding-top: 2px; }
+.dt__groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 14px; }
+.dt__g:last-child:nth-child(odd) { grid-column: 1 / -1; }   /* an odd one out spans the row instead of leaving a gap */
+.dt__g { padding: 14px 16px 16px; border-radius: 12px; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--stroke); }
+.dt__g h5 { margin: 0 0 0.65rem; font: 600 1rem var(--f-body); color: #fff; }
+.dt__g .title__facts { gap: 0.5rem; font-size: 0.92rem; }
+.dt__ai { padding: 16px 18px; border-radius: 12px; background: rgba(124, 196, 255, 0.07); border: 1px solid rgba(124, 196, 255, 0.3); }
+.dt__ai h4 { color: var(--cyan); }
+.dt__ai p { margin: 0; color: var(--ink-2); }
+.dt__ai--none { background: rgba(61, 220, 151, 0.06); border-color: rgba(61, 220, 151, 0.3); }
+.dt__ai--none h4 { color: var(--good); }
+.dt__stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.dt__stat { margin: 0; display: grid; gap: 4px; padding: 12px 14px; border-radius: 12px; background: rgba(0, 0, 0, 0.28); border: 1px solid var(--stroke); }
+.dt__stat b { font: 400 clamp(1.6rem, 3vw, 2.2rem) / 1 var(--f-display); letter-spacing: 0.02em; color: var(--gold); }
+.dt__stat span { font-size: 0.8rem; line-height: 1.3; color: var(--ink-3); }
+.dt__cta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; padding: 18px 20px; border-radius: 14px; background: linear-gradient(120deg, rgba(255, 59, 47, 0.18), rgba(255, 170, 60, 0.1)); border: 1px solid rgba(255, 106, 61, 0.35); }
+.dt__cta p { margin: 0; font: 600 1.05rem var(--f-body); }
+@media (max-width: 700px) { .dt__two { grid-template-columns: 1fr; } .dt__groups { grid-template-columns: 1fr; } }
 
 /* trailer */
 .trailer[open] { display: block; position: fixed; inset: 0; width: 100%; height: 100%; max-width: 100%; max-height: 100%; margin: 0; overflow: hidden; background: #000; }
@@ -358,6 +388,10 @@ dialog::backdrop { background: rgba(0, 0, 0, 0.78); overflow: hidden; overscroll
 
 /* ---------- responsive ---------- */
 @media (max-width: 1100px) { .hide-md { display: none; } }
+@media (max-width: 1400px) { .hide-xl { display: none; } }                             /* the LinkedIn icon in the nav only fits on a wide screen; it is also in the footer and the end credits */
+@media (max-width: 1280px) { .nav__links a { padding: 8px 8px; font-size: 0.86rem; } }   /* eight links need tighter spacing */
+@media (min-width: 861px) and (max-width: 1000px) { .brand__name { display: none; } }   /* eight links need the room */
+.nav__links a { white-space: nowrap; }
 @media (max-width: 860px) {
   :root { --nav: 58px; }
   body { padding-bottom: 66px; }
