@@ -444,7 +444,7 @@
           '<li>' + icon('i-mail') + '<a href="mailto:' + esc(P.email) + '">' + esc(P.email) + '</a></li>' +
           '<li>' + icon('i-site') + '<a href="' + esc(R.portfolio) + '">' + esc(show(R.portfolio)) + '</a></li>' +
           '<li>' + icon('i-in') + '<a href="' + esc(P.linkedin) + '" target="_blank" rel="noopener">' + esc(show(P.linkedin)) + '</a></li></ul></div>' +
-        '<div class="rz-actions"><a class="btn btn--ember btn--lg" data-resume href="' + esc(R.file) + '" download="Kumaran_M_S_Resume.pdf">' + icon('i-download') + 'Download PDF</a>' +
+        '<div class="rz-actions"><a class="btn btn--ember btn--lg" data-resume href="' + esc(R.file) + '" download="Kumaran_MS_Master_Resume.pdf">' + icon('i-download') + 'Download PDF</a>' +
           '<a class="btn btn--light" href="' + esc(C.mail.hiring) + '">' + icon('i-mail') + 'Email about a role</a>' +
           '<button type="button" class="btn btn--ghost" data-act="print">' + icon('i-print') + 'Print</button>' +
           '<a class="btn btn--ghost" href="#top">' + icon('i-chev-l') + 'Back to the portfolio</a></div>' +

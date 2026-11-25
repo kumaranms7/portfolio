@@ -1,7 +1,7 @@
 /* Builds the resume PDF from the same data the Resume page uses (site/assets/js/resume.js), so the page and the PDF never drift apart.
 
    Run after you edit resume.js (or the person details in content.js):   node tools/make-resume.mjs
-   Output: site/assets/Kumaran_M_S_Resume.pdf  (the file behind the floating "Download resume" button)
+   Output: site/assets/Kumaran_MS_Master_Resume.pdf  (the file behind the floating "Download resume" button)
 
    It prints with Microsoft Edge or Google Chrome in headless mode (no packages needed). If yours is somewhere else, set EDGE_PATH. */
 import fs from 'node:fs';

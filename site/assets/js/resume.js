@@ -1,7 +1,7 @@
 /* ------------------------------------------------------------------
    The resume: ONE source of truth.
    - The Resume page on the site is drawn from this (render.js, renderResume).
-   - The PDF (site/assets/Kumaran_M_S_Resume.pdf, the floating Download button) is built from this too:
+   - The PDF (site/assets/Kumaran_MS_Master_Resume.pdf, the floating Download button) is built from this too:
          node tools/make-resume.mjs
    Edit the words here, run that command, and the page and the PDF stay identical.
    Facts follow the corrected list: Senior Software Engineer from Feb 2024, 50+ projects delivered, 100+ sites supported,
@@ -12,7 +12,7 @@
   var AQ = (window.AQ = window.AQ || {});
   AQ.content = AQ.content || {};
   AQ.content.resume = {
-  "file": "assets/Kumaran_M_S_Resume.pdf",
+  "file": "assets/Kumaran_MS_Master_Resume.pdf",
   "portfolio": "https://kumaranms7.github.io/portfolio/",
   "titles": {
     "summary": "PROFESSIONAL SUMMARY",

@@ -139,7 +139,7 @@ out with the clean background; to remake the loop, repeat the same steps with a 
 | To change | Edit |
 |---|---|
 | Career seasons, bullets, dates, skills | `site/assets/js/content.js` (`journey`, `skills`) |
-| The resume (page AND PDF) | `site/assets/js/resume.js`, then run `node tools/make-resume.mjs` to rebuild `site/assets/Kumaran_M_S_Resume.pdf` (needs Edge or Chrome; set `EDGE_PATH` if yours is elsewhere) |
+| The resume (page AND PDF) | `site/assets/js/resume.js`, then run `node tools/make-resume.mjs` to rebuild `site/assets/Kumaran_MS_Master_Resume.pdf` (needs Edge or Chrome; set `EDGE_PATH` if yours is elsewhere) |
 | The eight AI Lab apps: card text and popup text | `site/assets/js/apps.js`. Each app has `kind`, `card` (hook, what, 3 points, result) and `detail` (what, problem, who, steps, highlight groups, safety, AI note, tech chips, numbers). Colours, icons, demo videos and the small before/after visuals are in `products` and `gadgets` in `content.js` |
 | Title screen text, About quote and facts, section headings | `intro`, `about`, `blocks` in `content.js` |
 | The three chips around your photo | `hero.chips` in `content.js` (`pos`: `left`, `right`, `br`) |
@@ -172,7 +172,7 @@ account IDs, screenshots or source code of the real tools in `site/`.
 
 ## The resume PDF
 
-`site/assets/Kumaran_M_S_Resume.pdf` is generated, not drawn by hand: `node tools/make-resume.mjs` reads `resume.js` and prints
+`site/assets/Kumaran_MS_Master_Resume.pdf` is generated, not drawn by hand: `node tools/make-resume.mjs` reads `resume.js` and prints
 a two-page, single-column, text-based PDF (good for job-site parsers) with Edge or Chrome in headless mode. Change the words in
 `resume.js`, run the command, commit both files. Keep a copy in your Resume folder if you want it next to your other versions.
 
