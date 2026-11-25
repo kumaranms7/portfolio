@@ -62,15 +62,15 @@
 .craft.is-auto.is-live .disc.is-on .disc__bar { opacity: 1; }
 
 /* ---------- the stage: a window with a scene inside ---------- */
-.scene {
+.cscene {
   position: absolute; inset: 0; display: flex; flex-direction: column; overflow: hidden; overflow: clip; border-radius: 14px; background: #0c0e13; border: 1px solid rgba(255, 255, 255, 0.16);
   box-shadow: 0 24px 50px rgba(0, 0, 0, 0.45); font-size: clamp(10px, 1.85cqw, 13.5px); transition: transform 0.25s var(--ease);
 }
-.scene__bar { flex: none; display: flex; align-items: center; gap: 6px; padding: 0 12px; height: 2.4em; background: #151821; border-bottom: 1px solid rgba(255, 255, 255, 0.08); font: 500 0.9em var(--f-mono); color: var(--ink-3); }
-.scene__bar i { width: 0.75em; height: 0.75em; border-radius: 50%; background: var(--ember); }
-.scene__bar i:nth-child(2) { background: var(--gold); }
-.scene__bar i:nth-child(3) { background: var(--good); margin-right: 0.5em; }
-.scene__foot { flex: none; display: flex; justify-content: space-between; padding: 0 12px; height: 2.2em; align-items: center; background: #151821; border-top: 1px solid rgba(255, 255, 255, 0.08); color: var(--ink-3); font: 500 0.82em var(--f-mono); }
+.cscene__bar { flex: none; display: flex; align-items: center; gap: 6px; padding: 0 12px; height: 2.4em; background: #151821; border-bottom: 1px solid rgba(255, 255, 255, 0.08); font: 500 0.9em var(--f-mono); color: var(--ink-3); }
+.cscene__bar i { width: 0.75em; height: 0.75em; border-radius: 50%; background: var(--ember); }
+.cscene__bar i:nth-child(2) { background: var(--gold); }
+.cscene__bar i:nth-child(3) { background: var(--good); margin-right: 0.5em; }
+.cscene__foot { flex: none; display: flex; justify-content: space-between; padding: 0 12px; height: 2.2em; align-items: center; background: #151821; border-top: 1px solid rgba(255, 255, 255, 0.08); color: var(--ink-3); font: 500 0.82em var(--f-mono); }
 .live { display: inline-block; width: 0.6em; height: 0.6em; margin-right: 0.6em; border-radius: 50%; color: var(--good); background: currentColor; }
 .stage__replay {
   position: absolute; z-index: 3; top: 5px; right: 8px; display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px 4px 8px; border-radius: 999px; cursor: pointer;
@@ -81,7 +81,7 @@
 .stage__replay:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 
 /* 1. code */
-.scene--code { font-family: var(--f-mono); }
+.cscene--code { font-family: var(--f-mono); }
 .ed { flex: 1 1 auto; min-height: 0; display: flex; gap: 14px; padding: 12px 14px; }   /* the editor in the code scene (not .code: that is the popup's code sample) */
 .code__gut { display: grid; align-content: start; text-align: right; color: rgba(255, 255, 255, 0.26); user-select: none; }
 .code__gut span, .tl { display: block; height: 1.7em; line-height: 1.7; }
@@ -91,7 +91,7 @@
 .code__ok { position: absolute; right: 14px; bottom: 3.4em; margin: 0; padding: 0.35em 0.9em; border-radius: 999px; font: 600 0.9em var(--f-body); color: var(--good); background: rgba(61, 220, 151, 0.14); border: 1px solid rgba(61, 220, 151, 0.4); }
 
 /* 2. design */
-.scene--design { background: #12141b; }
+.cscene--design { background: #12141b; }
 .dz { flex: 1 1 auto; min-height: 0; display: flex; gap: 4%; padding: 14px; }
 .dz__desk { position: relative; flex: 1 1 62%; min-width: 0; }
 .dz__phone { flex: 0 0 17%; min-width: 0; padding: 5px; border-radius: 16px; border: 2px solid rgba(255, 255, 255, 0.3); background: #0c0e13; }
@@ -141,7 +141,7 @@
 .seo__vitals b { padding: 0.18em 0.8em; border-radius: 999px; font: 600 0.85em var(--f-body); color: var(--good); background: rgba(61, 220, 151, 0.16); border: 1px solid rgba(61, 220, 151, 0.42); }
 
 /* 4. AI-assisted development */
-.scene--ai { font-family: var(--f-mono); }
+.cscene--ai { font-family: var(--f-mono); }
 .ai { flex: 1 1 auto; min-height: 0; display: grid; align-content: start; gap: 0.7em; padding: 12px 16px; }
 .ai__prompt { display: flex; gap: 0.6em; color: #fff; }
 .ai__prompt b { color: var(--gold); font-weight: 600; }
@@ -190,24 +190,24 @@
   @keyframes sc-grow { from { scale: 1 0; } }
   @keyframes sc-fill { from { background-size: 0 100%; outline-color: rgba(29, 36, 51, 0.5); } }
 
-  .scene.is-run .live { animation: sc-pulse 1.8s ease-out infinite; }
+  .cscene.is-run .live { animation: sc-pulse 1.8s ease-out infinite; }
 
   /* 1. code: each line types itself, then the tests pass */
-  .scene.is-run .tl__t { animation: sc-type calc(var(--c) * var(--s)) steps(var(--c), end) var(--d) backwards, sc-caret calc(var(--c) * var(--s)) linear var(--d) backwards; }
-  .scene.is-run .code__ok { animation: sc-pop 0.5s cubic-bezier(0.3, 1.5, 0.5, 1) var(--d) backwards; }
+  .cscene.is-run .tl__t { animation: sc-type calc(var(--c) * var(--s)) steps(var(--c), end) var(--d) backwards, sc-caret calc(var(--c) * var(--s)) linear var(--d) backwards; }
+  .cscene.is-run .code__ok { animation: sc-pop 0.5s cubic-bezier(0.3, 1.5, 0.5, 1) var(--d) backwards; }
 
   /* 2. design: the wireframe is painted in, a cursor clicks the button, the phone version and the palette appear */
   @keyframes dz-cur { from { opacity: 0; translate: 5em 4em; } }
   @keyframes dz-ring { 0% { opacity: 0.8; scale: 0.3; } 100% { opacity: 0; scale: 1.7; } }
   @keyframes dz-press { 40% { scale: 0.88; } }
   @keyframes dz-phone { from { opacity: 0; translate: 2.5em 0; } }
-  .scene.is-run .pg i, .scene.is-run .pg b, .scene.is-run .pg__img, .scene.is-run .pbtn { outline-color: transparent; animation: sc-fill 0.55s ease-out var(--d) backwards; }
-  .scene.is-run .dz__cur { animation: dz-cur 0.7s var(--ease) 1650ms backwards; }
-  .scene.is-run .dz__ring { animation: dz-ring 0.6s ease-out 2350ms backwards; }
-  .scene.is-run .dz__desk .pbtn { animation: sc-fill 0.55s ease-out var(--d) backwards, dz-press 0.3s 2350ms; }
-  .scene.is-run .dz__phone { animation: dz-phone 0.6s var(--ease) 2500ms backwards; }
-  .scene.is-run .dz__pal i { animation: sc-pop 0.4s cubic-bezier(0.3, 1.5, 0.5, 1) var(--d) backwards; }
-  .scene.is-run .dz__pal p { animation: sc-rise 0.5s var(--ease) var(--d) backwards; }
+  .cscene.is-run .pg i, .cscene.is-run .pg b, .cscene.is-run .pg__img, .cscene.is-run .pbtn { outline-color: transparent; animation: sc-fill 0.55s ease-out var(--d) backwards; }
+  .cscene.is-run .dz__cur { animation: dz-cur 0.7s var(--ease) 1650ms backwards; }
+  .cscene.is-run .dz__ring { animation: dz-ring 0.6s ease-out 2350ms backwards; }
+  .cscene.is-run .dz__desk .pbtn { animation: sc-fill 0.55s ease-out var(--d) backwards, dz-press 0.3s 2350ms; }
+  .cscene.is-run .dz__phone { animation: dz-phone 0.6s var(--ease) 2500ms backwards; }
+  .cscene.is-run .dz__pal i { animation: sc-pop 0.4s cubic-bezier(0.3, 1.5, 0.5, 1) var(--d) backwards; }
+  .cscene.is-run .dz__pal p { animation: sc-rise 0.5s var(--ease) var(--d) backwards; }
 
   /* 3. SEO: the score climbs, the checks tick, the line draws, the vitals turn green */
   @keyframes seo-count { from { --n: 75; } }
@@ -216,40 +216,40 @@
   @keyframes seo-mark { from { opacity: 0; } }
   @keyframes seo-draw { from { stroke-dashoffset: 1; } }
   @keyframes seo-vital { from { color: rgba(255, 255, 255, 0.6); background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.22); } }
-  .scene.is-run .seo__n span { animation: seo-count 2.2s cubic-bezier(0.2, 0.7, 0.2, 1) 0.3s backwards; }
-  .scene.is-run .seo__n em { animation: sc-pop 0.4s ease-out 2.4s backwards; }
-  .scene.is-run .seo__gauge .arc { animation: seo-arc 2.2s cubic-bezier(0.2, 0.7, 0.2, 1) 0.3s backwards; }
-  .scene.is-run .seo__list li { animation: sc-slide 0.4s var(--ease) var(--d) backwards; }
-  .scene.is-run .seo__list i { animation: seo-tick 0.3s ease-out calc(var(--d) + 220ms) backwards; }
-  .scene.is-run .seo__list i::after { animation: seo-mark 0.3s ease-out calc(var(--d) + 260ms) backwards; }
-  .scene.is-run .seo__chart .line { animation: seo-draw 2.6s ease-in-out 0.5s backwards; }
-  .scene.is-run .seo__chart .area { animation: seo-mark 1.2s ease-out 2.4s backwards; }
-  .scene.is-run .seo__vitals b { animation: seo-vital 0.4s ease-out var(--d) backwards; }
+  .cscene.is-run .seo__n span { animation: seo-count 2.2s cubic-bezier(0.2, 0.7, 0.2, 1) 0.3s backwards; }
+  .cscene.is-run .seo__n em { animation: sc-pop 0.4s ease-out 2.4s backwards; }
+  .cscene.is-run .seo__gauge .arc { animation: seo-arc 2.2s cubic-bezier(0.2, 0.7, 0.2, 1) 0.3s backwards; }
+  .cscene.is-run .seo__list li { animation: sc-slide 0.4s var(--ease) var(--d) backwards; }
+  .cscene.is-run .seo__list i { animation: seo-tick 0.3s ease-out calc(var(--d) + 220ms) backwards; }
+  .cscene.is-run .seo__list i::after { animation: seo-mark 0.3s ease-out calc(var(--d) + 260ms) backwards; }
+  .cscene.is-run .seo__chart .line { animation: seo-draw 2.6s ease-in-out 0.5s backwards; }
+  .cscene.is-run .seo__chart .area { animation: seo-mark 1.2s ease-out 2.4s backwards; }
+  .cscene.is-run .seo__vitals b { animation: seo-vital 0.4s ease-out var(--d) backwards; }
 
   /* 4. AI: a prompt, Claude works, a small diff, my checks, my sign-off */
   @keyframes ai-work { 0% { opacity: 0; } 10%, 85% { opacity: 1; } 100% { opacity: 0; } }
   @keyframes ai-dot { 0%, 100% { translate: 0 0; opacity: 0.4; } 50% { translate: 0 -0.35em; opacity: 1; } }
   @keyframes ai-stamp { from { opacity: 0; scale: 2.6; rotate: -32deg; } }
-  .scene.is-run .ai__work { animation: ai-work 1.35s linear var(--d) both; }
-  .scene.is-run .ai__work i { animation: ai-dot 0.8s ease-in-out infinite; }
-  .scene.is-run .ai__work i:nth-child(2) { animation-delay: 0.12s; }
-  .scene.is-run .ai__work i:nth-child(3) { animation-delay: 0.24s; }
-  .scene.is-run .ai__diff p { animation: sc-slide 0.35s var(--ease) var(--d) backwards; }
-  .scene.is-run .ai__checks li { animation: sc-rise 0.35s var(--ease) var(--d) backwards; }
-  .scene.is-run .ai__stamp { animation: ai-stamp 0.45s cubic-bezier(0.3, 1.5, 0.5, 1) var(--d) backwards; }
+  .cscene.is-run .ai__work { animation: ai-work 1.35s linear var(--d) both; }
+  .cscene.is-run .ai__work i { animation: ai-dot 0.8s ease-in-out infinite; }
+  .cscene.is-run .ai__work i:nth-child(2) { animation-delay: 0.12s; }
+  .cscene.is-run .ai__work i:nth-child(3) { animation-delay: 0.24s; }
+  .cscene.is-run .ai__diff p { animation: sc-slide 0.35s var(--ease) var(--d) backwards; }
+  .cscene.is-run .ai__checks li { animation: sc-rise 0.35s var(--ease) var(--d) backwards; }
+  .cscene.is-run .ai__stamp { animation: ai-stamp 0.45s cubic-bezier(0.3, 1.5, 0.5, 1) var(--d) backwards; }
 
   /* 5. servers: push, deploy, everything green, the one slow day heals */
   @keyframes srv-fill { from { width: 0; } }
   @keyframes srv-heal { from { background: var(--gold); scale: 1 0.55; } }
-  .scene.is-run .srv__ln { animation: sc-rise 0.35s var(--ease) var(--d) backwards; }
-  .scene.is-run .srv__bar { animation: sc-rise 0.3s var(--ease) var(--d) backwards; }
-  .scene.is-run .srv__bar i { animation: srv-fill 1.3s ease-in-out var(--d) backwards; }
-  .scene.is-run .srv__up i { animation: sc-grow 0.3s var(--ease) calc(500ms + var(--i) * 32ms) backwards; }
-  .scene.is-run .srv__up i.slow { animation: sc-grow 0.3s var(--ease) calc(500ms + var(--i) * 32ms) backwards, srv-heal 0.6s ease-out 3.1s backwards; }
-  .scene.is-run .srv__list li { animation: sc-slide 0.35s var(--ease) backwards; }
-  .scene.is-run .srv__list li:nth-child(2) { animation-delay: 0.1s; }
-  .scene.is-run .srv__list li:nth-child(3) { animation-delay: 0.2s; }
-  .scene.is-run .srv__list li:nth-child(4) { animation-delay: 0.3s; }
+  .cscene.is-run .srv__ln { animation: sc-rise 0.35s var(--ease) var(--d) backwards; }
+  .cscene.is-run .srv__bar { animation: sc-rise 0.3s var(--ease) var(--d) backwards; }
+  .cscene.is-run .srv__bar i { animation: srv-fill 1.3s ease-in-out var(--d) backwards; }
+  .cscene.is-run .srv__up i { animation: sc-grow 0.3s var(--ease) calc(500ms + var(--i) * 32ms) backwards; }
+  .cscene.is-run .srv__up i.slow { animation: sc-grow 0.3s var(--ease) calc(500ms + var(--i) * 32ms) backwards, srv-heal 0.6s ease-out 3.1s backwards; }
+  .cscene.is-run .srv__list li { animation: sc-slide 0.35s var(--ease) backwards; }
+  .cscene.is-run .srv__list li:nth-child(2) { animation-delay: 0.1s; }
+  .cscene.is-run .srv__list li:nth-child(3) { animation-delay: 0.2s; }
+  .cscene.is-run .srv__list li:nth-child(4) { animation-delay: 0.3s; }
 }
 
 /* ---------- tablets and phones: an accordion ---------- */

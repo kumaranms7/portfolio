@@ -163,10 +163,9 @@ ffmpeg -i new.mp4 -vf "scale=1280:-2,format=yuv420p" -c:v libx264 -crf 27 -prese
 ```
 To remove a video, delete its `video:` line in `content.js`.
 
-**Videos are switched off for now.** `demoVideos: false` in `content.js` hides them, and `.gitignore` keeps the three
-`demo-*.mp4` files and their `demo-*.webp` posters out of git, so they are not published. Once you have checked what is
-on screen (employer logo, account names, a real client), set `demoVideos: true`, delete the two `demo-` lines from
-`.gitignore`, commit the files and push.
+**Videos are on.** `demoVideos: true` in `content.js` shows them in the three product popups; set it to `false` to hide
+them without deleting anything. They are published with the site, so keep checking what is on screen before you replace
+one (no credentials, no private client data).
 
 Product names are generic. Before you publish a video, check what is on screen: no real client names, account IDs, phone numbers, addresses or photos of real people, and no credentials. Keep it that way: no client names,
 account IDs, screenshots or source code of the real tools in `site/`.

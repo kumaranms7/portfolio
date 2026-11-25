@@ -161,7 +161,7 @@
   /* ---------- "What I do": the animated scenes ----------
      Pure HTML and CSS drawings (craft.css plays them). They are decorative, so screen readers skip them;
      the text beside each one says the same thing in words. */
-  function sbar(title) { return '<div class="scene__bar"><i></i><i></i><i></i><span>' + esc(title) + '</span></div>'; }
+  function sbar(title) { return '<div class="cscene__bar"><i></i><i></i><i></i><span>' + esc(title) + '</span></div>'; }
   /* one typed line: segs = [[class, text], ...], at = start (ms), ms = time per character. Returns the markup and when it ends. */
   function tl(segs, at, ms) {
     var n = segs.reduce(function (a, s) { return a + s[1].length; }, 0);
@@ -192,14 +192,14 @@
       ];
       var t = 300, src = '', gut = '';
       L.forEach(function (segs, i) { var r = tl(segs, t, 18); src += r.html; t = r.end + 140; gut += '<span>' + (i + 1) + '</span>'; });
-      return '<div class="scene scene--code" aria-hidden="true">' + sbar('orders.php') +
+      return '<div class="cscene cscene--code" aria-hidden="true">' + sbar('orders.php') +
         '<div class="ed"><div class="code__gut">' + gut + '</div><div class="code__src">' + src + '</div></div>' +
         '<p class="code__ok" style="--d:' + t + 'ms">✓ 24 tests passed</p>' +
-        '<div class="scene__foot"><span><i class="live"></i>main</span><span>PHP 8.1</span></div></div>';
+        '<div class="cscene__foot"><span><i class="live"></i>main</span><span>PHP 8.1</span></div></div>';
     },
 
     design: function () {
-      return '<div class="scene scene--design" aria-hidden="true">' + sbar('homepage layout') +
+      return '<div class="cscene cscene--design" aria-hidden="true">' + sbar('homepage layout') +
         '<div class="dz"><div class="dz__desk">' + page(false, 150) + '</div>' +
         '<div class="dz__phone">' + page(true, 2500) + '</div>' +
         '<div class="dz__pal"><i style="--c:#ff3b2f;--d:3300ms"></i><i style="--c:#f5c04a;--d:3420ms"></i><i style="--c:#3ddc97;--d:3540ms"></i><i style="--c:#7cc4ff;--d:3660ms"></i><p style="--d:3800ms">Aa</p></div></div></div>';
@@ -207,7 +207,7 @@
 
     seo: function () {
       var items = ['Title and meta tags', 'Canonical tag', 'Schema markup', 'Image sizes', 'Core Web Vitals'];
-      return '<div class="scene scene--seo" aria-hidden="true">' + sbar('seo-report') +
+      return '<div class="cscene cscene--seo" aria-hidden="true">' + sbar('seo-report') +
         '<div class="seo"><div class="seo__gauge"><svg viewBox="0 0 100 100"><circle class="trk" cx="50" cy="50" r="42"/><circle class="arc" cx="50" cy="50" r="42" pathLength="100"/></svg>' +
         '<p class="seo__n"><span></span><em>+</em></p><small>SEO score</small></div>' +
         '<ul class="seo__list">' + items.map(function (t, i) { return '<li style="--d:' + (500 + i * 380) + 'ms"><i></i>' + t + '</li>'; }).join('') + '</ul></div>' +
@@ -218,7 +218,7 @@
 
     ai: function () {
       var p = tl([['p', 'add a dry-run mode to the meta tag tool']], 250, 28);
-      return '<div class="scene scene--ai" aria-hidden="true">' + sbar('claude-code') +
+      return '<div class="cscene cscene--ai" aria-hidden="true">' + sbar('claude-code') +
         '<div class="ai"><div class="ai__prompt"><b>&gt;</b>' + p.html + '</div>' +
         '<p class="ai__work" style="--d:' + (p.end + 200) + 'ms"><i></i><i></i><i></i>Claude Code is working</p>' +
         '<div class="ai__diff"><p class="del" style="--d:2900ms">- $meta = write_now($pages);</p><p class="add" style="--d:3100ms">+ $meta = preview($pages);</p><p class="add" style="--d:3300ms">+ write_files(only_if: approved);</p></div>' +
@@ -229,7 +229,7 @@
     server: function () {
       var cmd = tl([['p', '$ '], ['f', 'git push origin main']], 250, 40), ticks = '';
       for (var i = 0; i < 30; i++) ticks += '<i' + (i === 21 ? ' class="slow"' : '') + ' style="--i:' + i + '"></i>';
-      return '<div class="scene scene--srv" aria-hidden="true">' + sbar('production') +
+      return '<div class="cscene cscene--srv" aria-hidden="true">' + sbar('production') +
         '<div class="srv"><div class="srv__term">' + cmd.html +
         '<p class="srv__ln" style="--d:1250ms">Deploying to production</p><div class="srv__bar" style="--d:1400ms"><i></i></div>' +
         '<p class="srv__ln srv__ln--ok" style="--d:2750ms">✓ Cache cleared</p><p class="srv__ln srv__ln--ok" style="--d:3000ms">✓ Health checks passed</p>' +

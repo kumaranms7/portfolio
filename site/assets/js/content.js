@@ -65,9 +65,9 @@
        (Visitors who prefer reduced motion always get none of it.) */
     fx: 'wild',
 
-    /* The three product demo videos in the popups. Off until you have checked what is on screen in them (employer logo,
-       account names, a real client). The files stay out of git (.gitignore) while this is false. */
-    demoVideos: false,
+    /* The three product demo videos in the popups (nothing downloads until a visitor presses play).
+       Set to false to hide them again; the files are in assets/video/ and the posters in assets/img/. */
+    demoVideos: true,
 
     /* The giant words that slide sideways between sections (only in 'wild'). One list per band. */
     marquee: [
@@ -119,7 +119,7 @@
       about: { eyebrow: 'The pilot', title: 'About me', sub: '' },
       craft: { eyebrow: 'Five crafts', title: 'What I do', sub: 'Software, design, SEO, AI-assisted builds and servers. Pick a craft and watch it work.' },
       story: { eyebrow: 'Original series · 5 seasons', title: 'My journey', sub: 'From data entry to AI tools. Each season lists what happened and the skills I picked up along the way.' },
-      lab: { eyebrow: 'Now streaming · 8 tools', title: 'AI Lab', sub: 'Three full products and five utilities, built with Claude Code for a digital-marketing agency’s daily work. Each card says what the app is and why it exists. Open one to see how it works, what keeps it safe and where AI is (and is not) used.' },
+      lab: { eyebrow: 'Now streaming · 8 tools', title: 'AI Lab', sub: 'Three full products and five utilities, built with Claude Code for a digital-marketing agency’s daily work. Each card says what the app is and why it exists. Open one to see how it works, what keeps it safe, where AI is (and is not) used and, for the three products, a demo video.' },
       method: { eyebrow: 'Six rules', title: 'How I build with AI', sub: 'The habits that make AI output safe to publish.' },
       skills: { eyebrow: '38 skills · 2 in training', title: 'Skill universe', sub: 'What I work with, grouped by where I picked it up.' },
       trophies: { eyebrow: 'Awards and milestones', title: 'Trophy room', sub: 'Eight trophies on the shelf, from a first promotion to the Best Employee Award.' },

@@ -126,7 +126,7 @@
     if (!root) return;
     var discs = $$('.disc', root), cur = 0, seen = false, auto = !reduced(), hoverT = 0;
     var wide = window.matchMedia ? window.matchMedia('(min-width: 1101px)') : { matches: true };
-    function scene(i) { return $('.scene', discs[i]); }
+    function scene(i) { return $('.cscene', discs[i]); }
     function stop(i) { var s = scene(i); if (s) { s.classList.remove('is-run'); s.style.transform = ''; } }
     function run(i) {
       var s = scene(i);
@@ -164,7 +164,7 @@
     var raf = 0;
     root.addEventListener('pointermove', function (e) {
       if (e.pointerType !== 'mouse' || reduced()) return;
-      var st = e.target.closest('.stage'), s = st && st.closest('.disc.is-on') && $('.scene', st);
+      var st = e.target.closest('.stage'), s = st && st.closest('.disc.is-on') && $('.cscene', st);
       if (!s) return;
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(function () {
@@ -174,7 +174,7 @@
     });
     root.addEventListener('pointerout', function (e) {
       var st = e.target.closest('.stage');
-      if (st && !st.contains(e.relatedTarget)) { cancelAnimationFrame(raf); var s = $('.scene', st); if (s) s.style.transform = ''; }
+      if (st && !st.contains(e.relatedTarget)) { cancelAnimationFrame(raf); var s = $('.cscene', st); if (s) s.style.transform = ''; }
     });
     // the story bar finished: open the next craft (laptop only)
     root.addEventListener('animationend', function (e) {
