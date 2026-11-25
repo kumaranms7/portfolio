@@ -16,7 +16,7 @@ const site = path.join(root, 'site');
 
 // load the data files the way a browser would
 globalThis.window = {};
-for (const f of ['content.js', 'apps.js']) vm.runInThisContext(fs.readFileSync(path.join(site, 'assets/js', f), 'utf8'), { filename: f });
+for (const f of ['content.js', 'apps.js', 'resume.js']) vm.runInThisContext(fs.readFileSync(path.join(site, 'assets/js', f), 'utf8'), { filename: f });
 const C = window.AQ.content;
 
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -27,7 +27,7 @@ const out = [];
 const P = C.person;
 out.push(`<h2>${esc(P.name)}: ${esc(C.intro.role)}</h2>`);
 out.push(`<p>${esc(C.intro.position)} · ${esc(C.intro.place)}. Open to remote roles. Seven years of PHP and WordPress delivery, now building Claude-powered desktop tools. This page needs JavaScript for the animated version; the same content follows in plain text.</p>`);
-out.push(`<p>Contact: <a href="mailto:${esc(P.email)}">${esc(P.email)}</a>, <a href="tel:${esc(P.phoneTel)}">${esc(P.phoneDisplay)}</a>, <a href="${esc(P.linkedin)}">LinkedIn</a>.</p>`);
+out.push(`<p>Contact: <a href="mailto:${esc(P.email)}">${esc(P.email)}</a>, <a href="tel:${esc(P.phoneTel)}">${esc(P.phoneDisplay)}</a>, <a href="${esc(P.linkedin)}">LinkedIn</a>. <a href="${esc(C.resume.file)}">Download the resume (PDF)</a>.</p>`);
 
 // about
 out.push('<h2>About</h2>');

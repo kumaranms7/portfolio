@@ -400,27 +400,65 @@
     }
   }
 
-  /* ---------- Resume (its own printable page) ---------- */
+  /* ---------- Resume page: exactly the words of the PDF (assets/js/resume.js), in a modern layout ---------- */
   function renderResume() {
-    var P = C.person;
-    var exp = J().slice().reverse().map(function (s) {
-      if (s.id === 'ai') return '<li><b>' + esc(s.years) + '</b> · AI automation tools, built alongside the senior role</li>';
-      return '<li><b>' + esc(s.years) + '</b> · ' + esc(s.role) + ', ' + esc(s.org) + '</li>';
+    var R = C.resume, P = C.person, T = R.titles;
+    function show(u) { return u.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''); }
+    // a skills sentence becomes chips: split on commas outside brackets, and on semicolons
+    function pieces(text) {
+      var out = [], depth = 0, cur = '';
+      for (var i = 0; i < text.length; i++) {
+        var ch = text.charAt(i);
+        if (ch === '(') depth++; else if (ch === ')') depth--;
+        if ((ch === ',' && depth === 0) || ch === ';') { if (cur.trim()) out.push(cur.trim()); cur = ''; } else cur += ch;
+      }
+      if (cur.trim()) out.push(cur.trim());
+      return out;
+    }
+    function list(items) { return '<ul class="title__facts">' + items.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>'; }
+    function chipList(items) { return '<ul class="chips">' + items.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>'; }
+    // o = the order on a phone, where the two columns become one
+    function block(cls, o, title, inner) { return '<section class="rz-sec ' + cls + '" style="--o:' + o + '"><h2>' + esc(title) + '</h2>' + inner + '</section>'; }
+
+    var jobs = R.jobs.map(function (j) {
+      var m = j.meta.split(' | ');   // organisation | dates | optional note
+      return '<li class="rz-job"><h3>' + esc(j.title) + '</h3><p class="rz-job__meta"><span class="rz-job__org">' + esc(m[0]) + '</span><span class="rz-pill">' + esc(m[1]) + '</span>' +
+        (m[2] ? '<span class="rz-pill rz-pill--note">' + esc(m[2]) + '</span>' : '') + '</p>' + list(j.bullets) + '</li>';
     }).join('');
-    var tools = C.tools.map(function (t) { return '<li><b>' + esc(t.name) + '</b>: ' + esc(t.line) + '</li>'; }).join('');
-    var skills = C.skills.filter(function (g) { return g.unlock < 99; }).map(function (g) { return '<li><b>' + esc(g.group) + ':</b> ' + esc(g.items.join(', ')) + '</li>'; }).join('');
-    var tr = C.achievements.map(function (a) { return '<li><b>' + esc(a.title) + '</b>: ' + esc(a.text) + '</li>'; }).join('');
+    var ART = ['blue', 'green', 'amber', 'ember'];
+    var feat = R.featured.map(function (f, i) {
+      return '<article class="rz-card art-' + ART[i % ART.length] + '"><h3>' + esc(f.name) + '</h3>' + chipList(f.tech.split(', ')) + list(f.bullets) + '</article>';
+    }).join('');
+    var wp = R.wp.map(function (w) { return '<article class="rz-card rz-wp"><h3>' + esc(w[0]) + '</h3><p>' + esc(w[1].charAt(0).toUpperCase() + w[1].slice(1)) + '</p></article>'; }).join('');
+    var skills = R.skills.map(function (s) { return '<div class="rz-skill"><h3>' + esc(s[0]) + '</h3>' + chipList(pieces(s[1])) + '</div>'; }).join('');
+    var RECI = ['i-trophy', 'i-check', 'i-user'];
+    var rec = '<ul class="rz-rec">' + R.recognition.map(function (t, i) { return '<li>' + icon(RECI[i % RECI.length]) + '<span>' + esc(t) + '</span></li>'; }).join('') + '</ul>';
+    var roles = R.headline.split(' | ').map(function (r) { return '<span>' + esc(r) + '</span>'; }).join('');
+
     $('[data-view="resume"]').innerHTML =
-      '<div class="resume__tools"><button type="button" class="btn btn--light" data-act="print">' + icon('i-print') + 'Print or save as PDF</button>' +
-      '<a class="btn btn--ember" href="' + esc(C.mail.hiring) + '">' + icon('i-mail') + 'Email about a role</a>' +
-      '<a class="btn btn--ghost" href="#top">' + icon('i-chev-l') + 'Back to the portfolio</a></div>' +
-      '<article class="paper"><h1 id="h-resume" tabindex="-1">' + esc(P.name) + '</h1><p class="paper__role">AI automation engineer</p>' +
-      '<p class="paper__contact">' + esc(P.place) + ' · ' + esc(P.phoneDisplay) + ' · ' + esc(P.email) + ' · ' + esc(P.linkedin.replace('https://www.', '').replace(/\/$/, '')) + '</p>' +
-      '<p class="paper__sum">Seven years of PHP and WordPress delivery, now building Claude-powered desktop tools. One of them cut Google Ads reporting from 1–2 hours to under a minute. Open to remote roles.</p>' +
-      '<div class="paper__facts">' + C.about.stats.map(function (s) { return '<div><b>' + esc(s[0]) + '</b><span>' + esc(s[1]) + '</span></div>'; }).join('') + '</div>' +
-      '<h3>Experience</h3><ul>' + exp + '</ul>' +
-      '<div class="paper__cols"><div><h3>AI tools</h3><ul>' + tools + '</ul></div><div><h3>Skills</h3><ul>' + skills + '</ul>' +
-      '<h3>Recognition and education</h3><ul>' + tr + '</ul></div></div></article>';
+      '<div class="rz"><header class="rz-head">' +
+        '<img class="rz-face" src="assets/img/kumaran-face.webp" alt="" width="120" height="120">' +
+        '<div><p class="rz-eyebrow">Resume</p><h1 id="h-resume" tabindex="-1">' + esc(P.name) + '</h1><p class="rz-roles">' + roles + '</p>' +
+          '<ul class="rz-contact"><li>' + icon('i-pin') + esc(P.place) + '</li>' +
+          '<li>' + icon('i-phone') + '<a href="tel:' + esc(P.phoneTel) + '">' + esc(P.phoneDisplay) + '</a></li>' +
+          '<li>' + icon('i-mail') + '<a href="mailto:' + esc(P.email) + '">' + esc(P.email) + '</a></li>' +
+          '<li>' + icon('i-site') + '<a href="' + esc(R.portfolio) + '">' + esc(show(R.portfolio)) + '</a></li>' +
+          '<li>' + icon('i-in') + '<a href="' + esc(P.linkedin) + '" target="_blank" rel="noopener">' + esc(show(P.linkedin)) + '</a></li></ul></div>' +
+        '<div class="rz-actions"><a class="btn btn--ember btn--lg" data-resume href="' + esc(R.file) + '" download="Kumaran_M_S_Resume.pdf">' + icon('i-download') + 'Download PDF</a>' +
+          '<a class="btn btn--light" href="' + esc(C.mail.hiring) + '">' + icon('i-mail') + 'Email about a role</a>' +
+          '<button type="button" class="btn btn--ghost" data-act="print">' + icon('i-print') + 'Print</button>' +
+          '<a class="btn btn--ghost" href="#top">' + icon('i-chev-l') + 'Back to the portfolio</a></div>' +
+      '</header>' +
+      '<div class="rz-body"><div class="rz-main">' +
+        block('rz-sum', 1, T.summary, '<p>' + esc(R.summary) + '</p>') +
+        block('rz-exp', 4, T.experience, '<ol class="rz-tl">' + jobs + '</ol>') +
+        block('rz-feat', 5, T.featured, '<p class="rz-intro">' + esc(R.featuredIntro) + '<a href="#top">' + esc(show(R.portfolio)) + '</a>.</p><div class="rz-cards">' + feat + '</div>') +
+        block('rz-wps', 6, T.wp, '<div class="rz-cards">' + wp + '</div>') +
+      '</div><aside class="rz-side">' +
+        block('rz-hi', 2, T.highlights, list(R.highlights)) +
+        block('rz-sk', 3, T.skills, skills) +
+        block('rz-rc', 7, T.recognition, rec) +
+      '</aside></div></div>';
   }
 
   /* ---------- title pages (the only click-to-open details: projects) ---------- */

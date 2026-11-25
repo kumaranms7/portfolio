@@ -262,18 +262,6 @@
       { group: 'In training', unlock: 99, items: ['React.js', 'Angular'] },
     ],
 
-    /* The eight AI tools. kind: major | utility */
-    tools: [
-      { id: 'gads', target: '#gads', kind: 'major', icon: 'i-ads', name: 'GAds Dashboard', line: 'Reports in under 1 minute', art: 'linear-gradient(150deg,#1d4ed8 0%,#0ea5e9 55%,#22d3ee 100%)' },
-      { id: 'modernizer', target: '#modernizer', kind: 'major', icon: 'i-site', name: 'Site Modernizer', line: 'Redesigns without losing rankings', art: 'linear-gradient(150deg,#0f766e 0%,#10b981 55%,#a3e635 100%)' },
-      { id: 'forms', target: '#forms', kind: 'major', icon: 'i-form', name: 'Form and Lead Platform', line: 'One login, many websites', art: 'linear-gradient(150deg,#c2410c 0%,#f97316 55%,#fbbf24 100%)' },
-      { id: 'enhancer', target: '#gadgets', kind: 'utility', icon: 'i-doc', name: 'Page Content Enhancer', line: 'SEO score 75 to 90+' },
-      { id: 'meta', target: '#gadgets', kind: 'utility', icon: 'i-tag', name: 'Meta Tag Updater', line: 'About 90% less effort' },
-      { id: 'canonical', target: '#gadgets', kind: 'utility', icon: 'i-link', name: 'Canonical Injector', line: 'Live on 30+ sites' },
-      { id: 'report', target: '#gadgets', kind: 'utility', icon: 'i-chart', name: 'SEO Report Automation', line: '1–2 hours to about 5 minutes' },
-      { id: 'images', target: '#gadgets', kind: 'utility', icon: 'i-image', name: 'Image Cleaner', line: 'Never auto-deletes' },
-    ],
-
     /* The five utilities. Their card and popup words live in apps.js; this keeps the icon, colour and the small before/after visuals. */
     gadgets: [
       { id: 'enhancer', icon: 'i-doc', name: 'Page Content Enhancer', art: 'ember',
@@ -294,14 +282,6 @@
       { title: 'A page that loses content fails', text: 'Titles, headings, links, phone numbers, forms and tracking IDs are checked against the original.', tool: 'Site Modernizer' },
       { title: 'Pay only for what needs AI', text: 'Pages already scoring 90+ skip the call. Model and effort level are chosen per run.', tool: 'Page Content Enhancer' },
       { title: 'Keys stay on the machine', text: 'API keys and Google Ads credentials are stored locally, never in the code.', tool: 'GAds Dashboard' },
-    ],
-
-    achievements: [
-      { title: 'Best Employee Award', text: 'CG-VAK Software & Exports Ltd., 2023', tier: 'gold' },
-      { title: 'Claude Code in Action', text: 'Certification from Anthropic', tier: 'silver' },
-      { title: 'AI Fluency: Framework & Foundations', text: 'Certificate of Completion from Anthropic, Sep 2026', tier: 'silver' },
-      { title: 'Three promotions', text: 'Data entry to QA/QC, Developer, then Senior Software Engineer', tier: 'bronze' },
-      { title: 'B.Sc. Mathematics', text: 'Sourashtra College, Madurai, 2017', tier: 'bronze' },
     ],
 
     /* ======================================================
@@ -346,7 +326,7 @@
       trophies: { href: '#trophies', title: 'Trophy Room', k: '8 trophies', icon: 'i-trophy', art: 'amber', line: 'Awards and milestones' },
       core: { href: '#core', title: 'Core Five', k: 'Top five', icon: 'i-check', art: 'blue', line: 'What I am best at' },
       websites: { href: '#websites', title: 'Websites', k: '4 builds', icon: 'i-site', art: 'ember', line: 'Client work, names left out' },
-      resume: { href: '#/resume', title: 'Resume', k: 'One page', icon: 'i-doc', art: 'slate', line: 'Printable summary' },
+      resume: { href: '#/resume', title: 'Resume', k: 'Download PDF', icon: 'i-doc', art: 'slate', line: 'Two pages, same words' },
       contact: { href: '#contact', title: 'End Credits', k: 'Say hello', icon: 'i-mail', art: 'green', line: 'Email, phone and LinkedIn' },
     },
 

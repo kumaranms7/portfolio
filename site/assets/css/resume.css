@@ -1,0 +1,133 @@
+/* ==========================================================
+   RESUME PAGE (#/resume) and the two floating buttons (Download resume, Back to top).
+   The words come from assets/js/resume.js; the same data builds the PDF.
+   ========================================================== */
+
+/* ---------- floating buttons ---------- */
+.rfab, .totop { position: fixed; z-index: 60; right: max(18px, env(safe-area-inset-right)); }
+.rfab {
+  bottom: max(18px, env(safe-area-inset-bottom)); display: inline-flex; align-items: center; gap: 10px; padding: 12px 20px 12px 16px; border-radius: 999px;
+  background: linear-gradient(135deg, var(--ember), var(--ember-2)); color: #fff; font: 600 0.92rem / 1 var(--f-body); text-decoration: none; white-space: nowrap;
+  box-shadow: 0 12px 32px rgba(255, 59, 47, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  transition: transform 0.25s var(--ease), box-shadow 0.25s, opacity 0.4s, translate 0.5s var(--ease);
+}
+.rfab .ico { width: 20px; height: 20px; flex: none; }
+.rfab__short { display: none; }
+.rfab small { padding: 3px 7px; border-radius: 6px; background: rgba(0, 0, 0, 0.24); font: 700 0.62rem / 1 var(--f-body); letter-spacing: 0.1em; }
+.rfab:hover, .rfab:focus-visible { transform: translateY(-3px); box-shadow: 0 16px 38px rgba(255, 59, 47, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.28); }
+.rfab:focus-visible, .totop:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+/* hidden until the intro is closed, and not needed on the resume page itself (it has its own download button) */
+body:not([data-state='ready']) .rfab { opacity: 0; pointer-events: none; translate: 0 24px; }
+html[data-page='resume'] .rfab { display: none; }
+
+.totop {
+  bottom: calc(max(18px, env(safe-area-inset-bottom)) + 58px); width: 46px; height: 46px; display: grid; place-items: center; padding: 0; border-radius: 50%; cursor: pointer;
+  color: #fff; background: rgba(22, 22, 27, 0.92); border: 1px solid var(--stroke-2); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.5);
+  opacity: 0; visibility: hidden; translate: 0 14px; transition: opacity 0.3s, translate 0.4s var(--ease), visibility 0s 0.4s, background 0.2s, transform 0.2s var(--ease);
+}
+.totop.is-on { opacity: 1; visibility: visible; translate: 0 0; transition: opacity 0.3s, translate 0.4s var(--ease), visibility 0s, background 0.2s, transform 0.2s var(--ease); }
+.totop:hover { background: #fff; color: #111; transform: translateY(-3px); }
+.totop .ico { width: 22px; height: 22px; }
+html[data-page='resume'] .totop { bottom: max(18px, env(safe-area-inset-bottom)); }
+.foot { padding-bottom: 96px; }   /* so the floating buttons never sit on the footer text */
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes rfab-ping { 0% { box-shadow: 0 12px 32px rgba(255, 59, 47, 0.38), 0 0 0 0 rgba(255, 59, 47, 0.55); } 70%, 100% { box-shadow: 0 12px 32px rgba(255, 59, 47, 0.38), 0 0 0 16px rgba(255, 59, 47, 0); } }
+  body[data-state='ready'] .rfab { animation: rfab-ping 2.6s ease-out 1.5s 3; }   /* three gentle pulses to say "here", then it stays quiet */
+}
+
+@media (max-width: 860px) {
+  .rfab { right: 14px; bottom: calc(66px + 14px + env(safe-area-inset-bottom)); padding: 12px 16px 12px 14px; }
+  .rfab__long { display: none; }
+  .rfab__short { display: inline; }
+  .totop { right: 14px; bottom: calc(66px + 14px + 58px + env(safe-area-inset-bottom)); }
+  html[data-page='resume'] .totop { bottom: calc(66px + 14px + env(safe-area-inset-bottom)); }
+}
+
+/* ---------- the page ---------- */
+.rz { max-width: 1180px; margin: 0 auto; display: grid; gap: 26px; }
+.rz-head {
+  position: relative; isolation: isolate; overflow: hidden; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 26px; align-items: center; padding: clamp(22px, 3.4vw, 38px);
+  border-radius: 24px; border: 1px solid var(--stroke); background: linear-gradient(135deg, #1d1019 0%, #2b1215 55%, #3a1b10 100%);
+}
+.rz-head::before { content: ''; position: absolute; z-index: -1; inset: -40% -10% auto auto; width: 70%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgba(255, 106, 61, 0.35), transparent 65%); }
+.rz-face { width: clamp(84px, 9vw, 120px); aspect-ratio: 1; border-radius: 50%; object-fit: cover; border: 3px solid rgba(255, 255, 255, 0.85); box-shadow: 0 14px 36px rgba(0, 0, 0, 0.5); }
+.rz-eyebrow { margin: 0 0 6px; font: 600 0.74rem var(--f-body); letter-spacing: 0.22em; text-transform: uppercase; color: var(--ember-2); }
+.rz-head h1 { margin: 0; font: 400 clamp(3rem, 7vw, 5.4rem) / 0.9 var(--f-display); letter-spacing: 0.02em; text-transform: uppercase; }
+.rz-roles { margin: 14px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.rz-roles span { padding: 6px 13px; border-radius: 999px; font: 600 0.7rem var(--f-body); letter-spacing: 0.14em; text-transform: uppercase; background: rgba(255, 59, 47, 0.16); border: 1px solid rgba(255, 106, 61, 0.5); }
+.rz-contact { margin: 16px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 8px 10px; }
+.rz-contact li, .rz-contact a { display: inline-flex; align-items: center; gap: 7px; font-size: 0.88rem; color: var(--ink-2); text-decoration: none; }
+.rz-contact li { padding: 6px 12px; border-radius: 999px; background: rgba(0, 0, 0, 0.28); border: 1px solid var(--stroke); }
+.rz-contact a:hover { color: #fff; }
+.rz-contact .ico { width: 16px; height: 16px; color: var(--ember-2); flex: none; }
+.rz-actions { display: grid; gap: 10px; justify-items: stretch; align-self: start; min-width: 220px; }
+.rz-actions .btn { justify-content: center; }
+
+.rz-body { display: grid; grid-template-columns: minmax(0, 1fr) 350px; gap: 26px; align-items: start; }
+.rz-main, .rz-side { display: grid; gap: 22px; min-width: 0; }
+.rz-sec { padding: clamp(18px, 2.4vw, 28px); border-radius: 20px; background: var(--surface); border: 1px solid var(--stroke); }
+.rz-sec > h2 { margin: 0 0 16px; font: 600 0.76rem var(--f-body); letter-spacing: 0.2em; text-transform: uppercase; color: var(--ember-2); }
+.rz-sum p { margin: 0; font: italic 500 clamp(1.1rem, 1.6vw, 1.32rem) / 1.5 var(--f-serif); color: #fff; }
+.rz-sec .title__facts { gap: 0.7rem; font-size: 0.95rem; }
+
+/* experience timeline */
+.rz-tl { margin: 0; padding: 0 0 0 22px; list-style: none; display: grid; gap: 22px; border-left: 2px solid var(--stroke-2); }
+.rz-job { position: relative; }
+.rz-job::before { content: ''; position: absolute; left: -29px; top: 7px; width: 12px; height: 12px; border-radius: 50%; background: var(--ember); box-shadow: 0 0 0 5px rgba(255, 59, 47, 0.2); }
+.rz-job h3 { margin: 0; font: 600 1.15rem / 1.3 var(--f-body); }
+.rz-job__meta { margin: 4px 0 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; color: var(--ink-3); font-size: 0.88rem; }
+.rz-job__org { color: var(--ink-2); font-weight: 500; }
+.rz-pill { padding: 3px 10px; border-radius: 999px; font: 600 0.72rem var(--f-body); letter-spacing: 0.06em; color: var(--gold); background: rgba(245, 192, 74, 0.1); border: 1px solid rgba(245, 192, 74, 0.35); }
+.rz-pill--note { color: var(--cyan); background: rgba(124, 196, 255, 0.08); border-color: rgba(124, 196, 255, 0.3); letter-spacing: 0; }
+
+/* featured projects and WordPress projects */
+.rz-intro { margin: 0 0 16px; color: var(--ink-2); }
+.rz-intro a { color: var(--cyan); }
+.rz-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.rz-card { position: relative; overflow: hidden; overflow: clip; padding: 20px 18px 18px; border-radius: 16px; background: var(--surface-2); border: 1px solid var(--stroke); }
+.rz-card::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 4px; background: var(--art, var(--ember)); }
+.rz-card h3 { margin: 0 0 10px; font: 400 1.7rem / 1 var(--f-display); letter-spacing: 0.02em; text-transform: uppercase; }
+.rz-card .chips { margin-bottom: 12px; }
+.rz-card .chips li { padding: 3px 10px; font-size: 0.72rem; }
+.rz-card .title__facts { gap: 0.55rem; font-size: 0.88rem; }
+.rz-card--wide { grid-column: 1 / -1; }
+.rz-card p { margin: 0; color: var(--ink-2); font-size: 0.9rem; }
+.rz-wp h3 { font: 600 1rem / 1.3 var(--f-body); letter-spacing: 0; text-transform: none; }
+
+/* side column */
+.rz-skill + .rz-skill { margin-top: 16px; }
+.rz-skill h3 { margin: 0 0 7px; font: 600 0.92rem var(--f-body); }
+.rz-skill .chips li { padding: 3px 10px; font-size: 0.74rem; }
+.rz-rec { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; }
+.rz-rec li { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 12px; align-items: start; font-size: 0.92rem; color: var(--ink-2); }
+.rz-rec .ico { width: 34px; height: 34px; padding: 7px; border-radius: 10px; color: var(--gold); background: rgba(245, 192, 74, 0.1); border: 1px solid rgba(245, 192, 74, 0.3); }
+
+@media (max-width: 1000px) {
+  .rz-body, .rz { display: flex; flex-direction: column; }
+  .rz-main, .rz-side { display: contents; }   /* the sections reorder themselves with --o on a phone */
+  .rz-sec { order: var(--o, 0); }
+  .rz-head { grid-template-columns: auto minmax(0, 1fr); }
+  .rz-actions { grid-column: 1 / -1; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+}
+@media (max-width: 640px) {
+  .rz-head { grid-template-columns: 1fr; }
+  .rz-cards { grid-template-columns: 1fr; }
+  .rz-tl { padding-left: 18px; }
+  .rz-job::before { left: -25px; }
+}
+
+/* ---------- print: a clean black-on-white copy of the same words ---------- */
+@media print {
+  .rfab, .totop, .rz-actions, .rz-face { display: none !important; }
+  .view[data-view='resume'] * { color: #000 !important; background: none !important; border-color: #bbb !important; box-shadow: none !important; }
+  .rz, .rz-body { display: block !important; }
+  .rz-main, .rz-side { display: block !important; }
+  .rz-head { padding: 0 0 8px; border: 0; }
+  .rz-head::before, .rz-card::before, .rz-eyebrow { display: none; }
+  .rz-sec { padding: 8px 0; border: 0; border-radius: 0; break-inside: avoid; }
+  .rz-cards { display: block; }
+  .rz-card { margin-bottom: 8px; padding: 6px 0; border: 0; break-inside: avoid; }
+  .rz-head h1 { font-size: 2.4rem; }
+}

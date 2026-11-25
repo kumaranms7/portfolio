@@ -56,7 +56,12 @@ dependencies. Only that folder is ever published.
 - **Navigation.** What I do, Journey, AI Lab, Skills, Trophies and Contact scroll to their section and the menu
   highlights where you are. A LinkedIn icon sits in the menu bar on wide screens (`person.linkedin` in `content.js`
   is the one place to change the address; it is also in the footer, the End credits, the resume and the search-engine data in `index.html`). The "Continue exploring" tiles under the hero do the same.
-- **Resume.** Its own printable page (`#/resume`) with Print or save as PDF.
+- **Resume.** Its own page (`#/resume`) in a modern two-column layout: header card with your photo and contact chips,
+  summary, experience timeline, featured projects as cards, skills as chips, highlights and recognition. It shows exactly
+  the words of the PDF, because both are built from one file (`site/assets/js/resume.js`). Print gives a clean black-on-white copy.
+- **Floating buttons.** A "Download resume" button (the PDF) sits bottom right on every page except the resume page, with three
+  gentle pulses after the intro. A round "back to top" button appears above it once you scroll about a screen down. On a phone
+  both sit above the bottom tab bar.
 - **Trailer.** A 25-second story-style sequence with progress bars, pause, previous and next.
 - **Phones.** Bottom tab bar, swipeable rows, same content.
 
@@ -133,7 +138,8 @@ out with the clean background; to remake the loop, repeat the same steps with a 
 
 | To change | Edit |
 |---|---|
-| Career seasons, bullets, dates, skills, tools | `site/assets/js/content.js` (`journey`, `skills`, `tools`) |
+| Career seasons, bullets, dates, skills | `site/assets/js/content.js` (`journey`, `skills`) |
+| The resume (page AND PDF) | `site/assets/js/resume.js`, then run `node tools/make-resume.mjs` to rebuild `site/assets/Kumaran_M_S_Resume.pdf` (needs Edge or Chrome; set `EDGE_PATH` if yours is elsewhere) |
 | The eight AI Lab apps: card text and popup text | `site/assets/js/apps.js`. Each app has `kind`, `card` (hook, what, 3 points, result) and `detail` (what, problem, who, steps, highlight groups, safety, AI note, tech chips, numbers). Colours, icons, demo videos and the small before/after visuals are in `products` and `gadgets` in `content.js` |
 | Title screen text, About quote and facts, section headings | `intro`, `about`, `blocks` in `content.js` |
 | The three chips around your photo | `hero.chips` in `content.js` (`pos`: `left`, `right`, `br`) |
@@ -164,6 +170,12 @@ on screen (employer logo, account names, a real client), set `demoVideos: true`,
 
 Product names are generic. Before you publish a video, check what is on screen: no real client names, account IDs, phone numbers, addresses or photos of real people, and no credentials. Keep it that way: no client names,
 account IDs, screenshots or source code of the real tools in `site/`.
+
+## The resume PDF
+
+`site/assets/Kumaran_M_S_Resume.pdf` is generated, not drawn by hand: `node tools/make-resume.mjs` reads `resume.js` and prints
+a two-page, single-column, text-based PDF (good for job-site parsers) with Edge or Chrome in headless mode. Change the words in
+`resume.js`, run the command, commit both files. Keep a copy in your Resume folder if you want it next to your other versions.
 
 ## Search engines and no-JavaScript readers
 

@@ -23,7 +23,8 @@
 
   function applyMail(root) {
     $$('[data-mail]', root).forEach(function (a) { a.href = C.mail[a.getAttribute('data-mail')] || a.href; });
-    $$('[data-linkedin]', root).forEach(function (a) { a.href = C.person.linkedin; });   // one place to change it: person.linkedin in content.js
+    $$('[data-linkedin]', root).forEach(function (a) { a.href = C.person.linkedin; });
+    $$('[data-resume]', root).forEach(function (a) { a.href = C.resume.file; });   // the PDF: resume.js says which file   // one place to change it: person.linkedin in content.js
   }
   applyMail(document);
 
@@ -436,6 +437,19 @@
     });
   }
   document.addEventListener('scrollend', syncNative);
+
+  /* ---------- back to top: shows after you scroll about one screen down ---------- */
+  (function () {
+    var b = $('[data-totop]'), on = false, queued = false;
+    if (!b) return;
+    function sync() { queued = false; var want = window.scrollY > Math.max(480, window.innerHeight * 0.8); if (want !== on) { on = want; b.classList.toggle('is-on', on); } }
+    window.addEventListener('scroll', function () { if (!queued) { queued = true; requestAnimationFrame(sync); } }, { passive: true });
+    b.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: reduced() ? 'auto' : 'smooth' });
+      var brand = $('.brand'); if (brand) brand.focus({ preventScroll: true });   // keyboard users land back at the top of the page
+    });
+    sync();
+  })();
 
   /* ---------- intro and profile chooser ---------- */
   var gate = $('#gate'), intro = $('[data-intro]', gate), who = $('[data-who]', gate), list = $('[data-profiles]', gate);
